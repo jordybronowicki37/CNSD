@@ -1,10 +1,10 @@
 package com.jb_cnsd.opdracht_1_2.domain.dto;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 
 @Getter
 public class SaldoDto {
-    @Min(0)
+    @Positive
     private float saldo;
 }
