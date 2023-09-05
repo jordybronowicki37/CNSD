@@ -3,9 +3,7 @@ package com.jb_cnsd.opdracht_1_2.data.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -13,13 +11,13 @@ public class Rekening {
     private final String iban;
     private float saldo;
     private RekeningStatus status;
-    private final List<RekeningHouder> rekeningHouders;
+    private final Set<RekeningHouder> rekeningHouders;
 
     public Rekening(String iban, RekeningHouder rekeningHouder) {
         this.iban = iban;
         saldo = 0;
         status = RekeningStatus.NORMAAL;
-        rekeningHouders = new ArrayList<>(List.of(rekeningHouder));
+        rekeningHouders = new HashSet<>(Set.of(rekeningHouder));
     }
 
     @Override

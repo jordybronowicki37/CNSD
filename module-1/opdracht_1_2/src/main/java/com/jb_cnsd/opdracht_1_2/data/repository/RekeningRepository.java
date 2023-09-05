@@ -3,15 +3,13 @@ package com.jb_cnsd.opdracht_1_2.data.repository;
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class RekeningRepository {
-    private static final List<Rekening> rekeningen = new ArrayList<>();
+    private static final Set<Rekening> rekeningen = new HashSet<>();
 
-    public List<Rekening> GetAll() {
+    public Set<Rekening> GetAll() {
         return rekeningen;
     }
 
@@ -20,14 +18,13 @@ public class RekeningRepository {
     }
 
     public void Add(Rekening rekening) {
-        if (!rekeningen.contains(rekening)) {
-            rekeningen.add(rekening);
-        }
+        rekeningen.add(rekening);
     }
 
-    public void Remove(String iban) {
+    public Rekening Remove(String iban) {
         var rekening = Get(iban);
-        if (rekening.isEmpty()) return;
+        if (rekening.isEmpty()) throw new NullPointerException();
         rekeningen.remove(rekening.get());
+        return rekening.get();
     }
 }
