@@ -9,12 +9,12 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class RekeningHouder {
+public class Persoon {
     private final String bsn;
     private String naam;
     private final Set<Rekening> rekeningen;
 
-    public RekeningHouder(String bsn, String naam) {
+    public Persoon(String bsn, String naam) {
         this.bsn = bsn;
         this.naam = naam;
         rekeningen = new HashSet<>();
@@ -24,7 +24,7 @@ public class RekeningHouder {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RekeningHouder that = (RekeningHouder) o;
+        Persoon that = (Persoon) o;
         return Objects.equals(bsn, that.bsn);
     }
 

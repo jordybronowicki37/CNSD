@@ -1,13 +1,13 @@
 package com.jb_cnsd.opdracht_1_2.domain.service;
 
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
-import com.jb_cnsd.opdracht_1_2.data.models.RekeningHouder;
-import com.jb_cnsd.opdracht_1_2.data.repository.RekeningHouderRepository;
+import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
+import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningCreateDto;
 import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningDto;
 import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningEditDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningHouderDto;
+import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonDto;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.RekeningException;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,14 @@ import java.util.List;
 @Service
 public class RekeningService {
     private final RekeningRepository rekeningRepository;
-    private final RekeningHouderRepository rekeningHouderRepository;
+    private final PersoonRepository persoonRepository;
 
     public RekeningService(
             RekeningRepository rekeningRepository,
-            RekeningHouderRepository rekeningHouderRepository
+            PersoonRepository persoonRepository
     ) {
         this.rekeningRepository = rekeningRepository;
-        this.rekeningHouderRepository = rekeningHouderRepository;
+        this.persoonRepository = persoonRepository;
     }
 
     public List<RekeningDto> GetAll() {
@@ -36,12 +36,12 @@ public class RekeningService {
     }
 
     public RekeningDto Create(RekeningCreateDto createDto) {
-        var rekeningHouder = findRekeningHouder(createDto.rekeningHouder());
-        var newRekening = new Rekening(createDto.iban(), rekeningHouder);
+        var persoon = findPersoon(createDto.persoonBsn());
+        var newRekening = new Rekening(createDto.iban(), persoon);
 
         if (rekeningRepository.GetAll().contains(newRekening)) throw new AlreadyExistsException("Er bestaat al een rekening met deze iban!");
 
-        rekeningHouder.getRekeningen().add(newRekening);
+        persoon.getRekeningen().add(newRekening);
         rekeningRepository.Add(newRekening);
         return new RekeningDto(newRekening);
     }
@@ -54,7 +54,7 @@ public class RekeningService {
 
     public void Remove(String iban) {
         var rekening = rekeningRepository.Remove(iban);
-        rekening.getRekeningHouders().forEach(r -> r.getRekeningen().remove(rekening));
+        rekening.getPersonen().forEach(r -> r.getRekeningen().remove(rekening));
     }
 
     public RekeningDto AddSaldo(String iban, float saldo) {
@@ -69,35 +69,35 @@ public class RekeningService {
         return new RekeningDto(rekening);
     }
 
-    public List<RekeningHouderDto> GetHouders(String iban) {
+    public List<PersoonDto> GetHouders(String iban) {
         var rekening = rekeningRepository.Get(iban);
-        return rekening.getRekeningHouders().stream().map(RekeningHouderDto::new).toList();
+        return rekening.getPersonen().stream().map(PersoonDto::new).toList();
     }
 
     public RekeningDto AddHouder(String iban, String bsn) {
         var rekening = rekeningRepository.Get(iban);
-        var houder = findRekeningHouder(bsn);
+        var persoon = findPersoon(bsn);
 
-        rekening.getRekeningHouders().add(houder);
-        houder.getRekeningen().add(rekening);
+        rekening.getPersonen().add(persoon);
+        persoon.getRekeningen().add(rekening);
         return new RekeningDto(rekening);
     }
 
     public RekeningDto RemoveHouder(String iban, String bsn) {
         var rekening = rekeningRepository.Get(iban);
-        var houder = findRekeningHouder(bsn);
+        var persoon = findPersoon(bsn);
 
         // Controleer of dit de laatste rekeninghouder is
-        var alleHouders = rekening.getRekeningHouders();
-        if (alleHouders.size() == 1 && alleHouders.contains(houder)) throw new RekeningException("De laatste rekeninghouder mag niet verwijderd worden!");
+        var personen = rekening.getPersonen();
+        if (personen.size() == 1 && personen.contains(persoon)) throw new RekeningException("De laatste rekeninghouder mag niet verwijderd worden!");
 
-        rekening.getRekeningHouders().remove(houder);
-        houder.getRekeningen().remove(rekening);
+        rekening.getPersonen().remove(persoon);
+        persoon.getRekeningen().remove(rekening);
 
         return new RekeningDto(rekening);
     }
 
-    private RekeningHouder findRekeningHouder(String bsn) {
-        return rekeningHouderRepository.Get(bsn);
+    private Persoon findPersoon(String bsn) {
+        return persoonRepository.Get(bsn);
     }
 }

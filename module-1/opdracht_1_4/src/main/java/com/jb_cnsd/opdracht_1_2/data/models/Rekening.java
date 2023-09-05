@@ -11,13 +11,13 @@ public class Rekening {
     private final String iban;
     private float saldo;
     private RekeningStatus status;
-    private final Set<RekeningHouder> rekeningHouders;
+    private final Set<Persoon> personen;
 
-    public Rekening(String iban, RekeningHouder rekeningHouder) {
+    public Rekening(String iban, Persoon personen) {
         this.iban = iban;
         saldo = 0;
         status = RekeningStatus.NORMAAL;
-        rekeningHouders = new HashSet<>(Set.of(rekeningHouder));
+        this.personen = new HashSet<>(Set.of(personen));
     }
 
     @Override

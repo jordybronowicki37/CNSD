@@ -55,7 +55,7 @@ public class RekeningController {
     }
 
     @GetMapping("{iban}/houder")
-    ResponseEntity<List<RekeningHouderDto>> GetHouders(@PathVariable String iban) {
+    ResponseEntity<List<PersoonDto>> GetHouders(@PathVariable String iban) {
         return new ResponseEntity<>(service.GetHouders(iban), HttpStatus.OK);
     }
 
