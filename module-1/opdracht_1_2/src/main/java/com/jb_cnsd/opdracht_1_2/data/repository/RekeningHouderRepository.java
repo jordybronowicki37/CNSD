@@ -14,8 +14,10 @@ public class RekeningHouderRepository {
         return rekeningHouders;
     }
 
-    public Optional<RekeningHouder> Get(String bsn) {
-        return rekeningHouders.stream().filter(r -> r.getBsn().equals(bsn)).findFirst();
+    public RekeningHouder Get(String bsn) {
+        var houder = rekeningHouders.stream().filter(r -> r.getBsn().equals(bsn)).findFirst();
+        if (houder.isEmpty()) throw new NotFoundException("De rekeninghouder is niet gevonden!");
+        return houder.get();
     }
 
     public void Add(RekeningHouder rekeningHouder) {
@@ -24,8 +26,7 @@ public class RekeningHouderRepository {
 
     public RekeningHouder Remove(String bsn) {
         var rekeningHouder = Get(bsn);
-        if (rekeningHouder.isEmpty()) throw new NotFoundException("De rekening is niet gevonden");
-        rekeningHouders.remove(rekeningHouder.get());
-        return rekeningHouder.get();
+        rekeningHouders.remove(rekeningHouder);
+        return rekeningHouder;
     }
 }

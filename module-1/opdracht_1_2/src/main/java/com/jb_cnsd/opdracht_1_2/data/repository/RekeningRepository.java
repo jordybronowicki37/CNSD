@@ -1,6 +1,7 @@
 package com.jb_cnsd.opdracht_1_2.data.repository;
 
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
+import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -13,8 +14,10 @@ public class RekeningRepository {
         return rekeningen;
     }
 
-    public Optional<Rekening> Get(String iban) {
-        return rekeningen.stream().filter(r -> r.getIban().equals(iban)).findFirst();
+    public Rekening Get(String iban) {
+        var rekening = rekeningen.stream().filter(r -> r.getIban().equals(iban)).findFirst();
+        if (rekening.isEmpty()) throw new NotFoundException("De rekening is niet gevonden!");
+        return rekening.get();
     }
 
     public void Add(Rekening rekening) {
@@ -23,8 +26,7 @@ public class RekeningRepository {
 
     public Rekening Remove(String iban) {
         var rekening = Get(iban);
-        if (rekening.isEmpty()) throw new NullPointerException();
-        rekeningen.remove(rekening.get());
-        return rekening.get();
+        rekeningen.remove(rekening);
+        return rekening;
     }
 }
