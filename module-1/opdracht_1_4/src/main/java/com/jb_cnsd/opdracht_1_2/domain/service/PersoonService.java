@@ -6,6 +6,7 @@ import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonCreateDto;
 import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonDto;
 import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonEditDto;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
+import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,30 +22,37 @@ public class PersoonService {
     }
 
     public List<PersoonDto> GetAll() {
-        return persoonRepository.GetAll().stream().map(PersoonDto::new).toList();
+        return persoonRepository.findAll().stream().map(PersoonDto::new).toList();
     }
 
     public PersoonDto Get(String iban) {
-        return new PersoonDto(persoonRepository.Get(iban));
+        var optionalPersoon = persoonRepository.findById(iban);
+        if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
+        return new PersoonDto(optionalPersoon.get());
     }
 
     public PersoonDto Create(PersoonCreateDto createDto) {
         var nieuwePersoon = new Persoon(createDto.bsn(), createDto.naam());
-        if (persoonRepository.GetAll().contains(nieuwePersoon))
-            throw new AlreadyExistsException("Er bestaat al een persoonBsn met deze bsn!");
+        if (persoonRepository.existsById(createDto.bsn()))
+            throw new AlreadyExistsException("Er bestaat al een persoon met deze bsn!");
 
-        persoonRepository.Add(nieuwePersoon);
+        persoonRepository.save(nieuwePersoon);
         return new PersoonDto(nieuwePersoon);
     }
 
     public PersoonDto Edit(String bsn, PersoonEditDto editDto) {
-        var persoon = persoonRepository.Get(bsn);
+        var optionalPersoon = persoonRepository.findById(bsn);
+        if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
+        var persoon = optionalPersoon.get();
+
         persoon.setNaam(editDto.naam());
+        persoonRepository.save(persoon);
         return new PersoonDto(persoon);
     }
 
     public void Remove(String bsn) {
-        var persoon = persoonRepository.Remove(bsn);
-        persoon.getRekeningen().forEach(r -> r.getPersonen().remove(persoon));
+        var optionalPersoon = persoonRepository.findById(bsn);
+        if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
+        persoonRepository.delete(optionalPersoon.get());
     }
 }
