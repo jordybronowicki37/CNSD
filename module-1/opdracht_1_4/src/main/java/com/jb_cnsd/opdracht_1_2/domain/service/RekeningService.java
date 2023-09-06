@@ -4,10 +4,10 @@ import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
 import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
-import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningCreateDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.RekeningEditDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningCreateDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningEditDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonDto;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.RekeningException;
@@ -28,15 +28,15 @@ public class RekeningService {
         this.persoonRepository = persoonRepository;
     }
 
-    public List<RekeningDto> GetAll() {
-        return rekeningRepository.findAll().stream().map(RekeningDto::new).toList();
+    public List<Rekening> GetAll() {
+        return rekeningRepository.findAll();
     }
 
-    public RekeningDto Get(String iban) {
-        return new RekeningDto(findRekening(iban));
+    public Rekening Get(String iban) {
+        return findRekening(iban);
     }
 
-    public RekeningDto Create(RekeningCreateDto createDto) {
+    public Rekening Create(RekeningCreateDto createDto) {
         var persoon = findPersoon(createDto.persoonBsn());
         var newRekening = new Rekening(createDto.iban(), persoon);
 
@@ -44,14 +44,14 @@ public class RekeningService {
 
         persoon.getRekeningen().add(newRekening);
         rekeningRepository.save(newRekening);
-        return new RekeningDto(newRekening);
+        return newRekening;
     }
 
-    public RekeningDto Edit(String iban, RekeningEditDto editDto) {
+    public Rekening Edit(String iban, RekeningEditDto editDto) {
         var rekening = findRekening(iban);
         rekening.setStatus(editDto.status());
         rekeningRepository.save(rekening);
-        return new RekeningDto(rekening);
+        return rekening;
     }
 
     public void Remove(String iban) {
@@ -59,36 +59,36 @@ public class RekeningService {
         rekeningRepository.delete(rekening);
     }
 
-    public RekeningDto AddSaldo(String iban, float saldo) {
+    public Rekening AddSaldo(String iban, float saldo) {
         var rekening = findRekening(iban);
         rekening.setSaldo(rekening.getSaldo() + saldo);
         rekeningRepository.save(rekening);
-        return new RekeningDto(rekening);
+        return rekening;
     }
 
-    public RekeningDto RemoveSaldo(String iban, float saldo) {
+    public Rekening RemoveSaldo(String iban, float saldo) {
         var rekening = findRekening(iban);
         rekening.setSaldo(rekening.getSaldo() - saldo);
         rekeningRepository.save(rekening);
-        return new RekeningDto(rekening);
+        return rekening;
     }
 
-    public List<PersoonDto> GetHouders(String iban) {
+    public List<Persoon> GetHouders(String iban) {
         var rekening = findRekening(iban);
-        return rekening.getPersonen().stream().map(PersoonDto::new).toList();
+        return rekening.getPersonen().stream().toList();
     }
 
-    public RekeningDto AddHouder(String iban, String bsn) {
+    public Rekening AddHouder(String iban, String bsn) {
         var rekening = findRekening(iban);
         var persoon = findPersoon(bsn);
 
         rekening.getPersonen().add(persoon);
         persoon.getRekeningen().add(rekening);
         rekeningRepository.save(rekening);
-        return new RekeningDto(rekening);
+        return rekening;
     }
 
-    public RekeningDto RemoveHouder(String iban, String bsn) {
+    public Rekening RemoveHouder(String iban, String bsn) {
         var rekening = findRekening(iban);
         var persoon = findPersoon(bsn);
 
@@ -99,7 +99,7 @@ public class RekeningService {
         rekening.getPersonen().remove(persoon);
         persoon.getRekeningen().remove(rekening);
 
-        return new RekeningDto(rekening);
+        return rekening;
     }
 
     private Rekening findRekening(String iban) {

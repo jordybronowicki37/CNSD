@@ -1,8 +1,8 @@
 package com.jb_cnsd.opdracht_1_2.web.controller;
 
-import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonCreateDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonDto;
-import com.jb_cnsd.opdracht_1_2.domain.dto.PersoonEditDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonCreateDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonDto;
+import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonEditDto;
 import com.jb_cnsd.opdracht_1_2.domain.service.PersoonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +21,34 @@ public class PersoonController {
 
     @GetMapping("")
     ResponseEntity<List<PersoonDto>> GetAll() {
-        return new ResponseEntity<>(service.GetAll(), HttpStatus.OK);
+        return new ResponseEntity<>(
+                service.GetAll().stream().map(PersoonDto::new).toList(),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("{bsn}")
     ResponseEntity<PersoonDto> Get(@PathVariable String bsn) {
-        return new ResponseEntity<>(service.Get(bsn), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new PersoonDto(service.Get(bsn)),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("")
     ResponseEntity<PersoonDto> Create(@RequestBody PersoonCreateDto body) {
-        return new ResponseEntity<>(service.Create(body), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new PersoonDto(service.Create(body)),
+                HttpStatus.OK
+        );
     }
 
     @PutMapping("{bsn}")
     ResponseEntity<PersoonDto> Edit(@PathVariable String bsn, @RequestBody PersoonEditDto body) {
-        return new ResponseEntity<>(service.Edit(bsn, body), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new PersoonDto(service.Edit(bsn, body)),
+                HttpStatus.OK
+        );
     }
 
     @DeleteMapping("{bsn}")

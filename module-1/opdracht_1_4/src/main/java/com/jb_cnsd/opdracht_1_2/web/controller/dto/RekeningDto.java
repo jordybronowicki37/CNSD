@@ -1,4 +1,4 @@
-package com.jb_cnsd.opdracht_1_2.domain.dto;
+package com.jb_cnsd.opdracht_1_2.web.controller.dto;
 
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
 import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
