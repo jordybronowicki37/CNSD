@@ -37,7 +37,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @GetMapping("{iban}")
-    ResponseEntity<RekeningDto> Get(@PathVariable String iban) {
+    ResponseEntity<RekeningDto> Get(@PathVariable long iban) {
         return new ResponseEntity<>(
                 new RekeningDto(service.Get(iban)),
                 HttpStatus.OK
@@ -52,7 +52,7 @@ public class RekeningController {
     @PostMapping("")
     ResponseEntity<RekeningDto> Create(@RequestBody RekeningCreateDto body) {
         return new ResponseEntity<>(
-                new RekeningDto(service.Create(body)),
+                new RekeningDto(service.Create(body.persoonId())),
                 HttpStatus.CREATED
         );
     }
@@ -63,7 +63,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PutMapping("{iban}")
-    ResponseEntity<RekeningDto> Create(@PathVariable String iban, @RequestBody RekeningEditDto body) {
+    ResponseEntity<RekeningDto> Create(@PathVariable long iban, @RequestBody RekeningEditDto body) {
         return new ResponseEntity<>(
                 new RekeningDto(service.Edit(iban, body)),
                 HttpStatus.OK
@@ -76,7 +76,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{iban}")
-    ResponseEntity<Void> Remove(@PathVariable String iban) {
+    ResponseEntity<Void> Remove(@PathVariable long iban) {
         service.Remove(iban);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -87,7 +87,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{iban}/saldo")
-    ResponseEntity<RekeningDto> AddHouder(@PathVariable String iban, @Valid @RequestBody SaldoDto body) {
+    ResponseEntity<RekeningDto> AddHouder(@PathVariable long iban, @Valid @RequestBody SaldoDto body) {
         return new ResponseEntity<>(
                 new RekeningDto(service.AddSaldo(iban, body.getSaldo())),
                 HttpStatus.OK
@@ -100,7 +100,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{iban}/saldo")
-    ResponseEntity<RekeningDto> RemoveHouder(@PathVariable String iban, @Valid @RequestBody SaldoDto body) {
+    ResponseEntity<RekeningDto> RemoveHouder(@PathVariable long iban, @Valid @RequestBody SaldoDto body) {
         return new ResponseEntity<>(
                 new RekeningDto(service.RemoveSaldo(iban, body.getSaldo())),
                 HttpStatus.OK
@@ -113,7 +113,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{iban}/persoon/{bsn}")
-    ResponseEntity<RekeningDto> AddPersoon(@PathVariable String iban, @PathVariable String bsn) {
+    ResponseEntity<RekeningDto> AddPersoon(@PathVariable long iban, @PathVariable long bsn) {
         return new ResponseEntity<>(
                 new RekeningDto(service.AddPersoon(iban, bsn)),
                 HttpStatus.OK
@@ -126,7 +126,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{iban}/persoon/{bsn}")
-    ResponseEntity<RekeningDto> RemovePersoon(@PathVariable String iban, @PathVariable String bsn) {
+    ResponseEntity<RekeningDto> RemovePersoon(@PathVariable long iban, @PathVariable long bsn) {
         return new ResponseEntity<>(
                 new RekeningDto(service.RemovePersoon(iban, bsn)),
                 HttpStatus.OK

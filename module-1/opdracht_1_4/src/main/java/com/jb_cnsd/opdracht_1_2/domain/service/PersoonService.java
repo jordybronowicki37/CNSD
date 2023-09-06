@@ -25,30 +25,30 @@ public class PersoonService {
         return persoonRepository.findAll();
     }
 
-    public Persoon Get(String iban) {
-        var optionalPersoon = persoonRepository.findById(iban);
+    public Persoon Get(long id) {
+        var optionalPersoon = persoonRepository.findById(id);
         if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
         return optionalPersoon.get();
     }
 
     public Persoon Create(PersoonCreateDto createDto) {
         var nieuwePersoon = new Persoon(createDto.bsn(), createDto.naam());
-        if (persoonRepository.existsById(createDto.bsn()))
+        if (persoonRepository.existsByBsn(createDto.bsn()))
             throw new AlreadyExistsException("Er bestaat al een persoon met deze bsn!");
 
         persoonRepository.save(nieuwePersoon);
         return nieuwePersoon;
     }
 
-    public Persoon Edit(String bsn, PersoonEditDto editDto) {
-        var persoon = Get(bsn);
+    public Persoon Edit(long id, PersoonEditDto editDto) {
+        var persoon = Get(id);
 
         persoon.setNaam(editDto.naam());
         persoonRepository.save(persoon);
         return persoon;
     }
 
-    public void Remove(String bsn) {
-        persoonRepository.delete(Get(bsn));
+    public void Remove(long id) {
+        persoonRepository.delete(Get(id));
     }
 }

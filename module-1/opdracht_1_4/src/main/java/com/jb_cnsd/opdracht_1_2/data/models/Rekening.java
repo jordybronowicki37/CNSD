@@ -3,7 +3,10 @@ package com.jb_cnsd.opdracht_1_2.data.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -11,9 +14,22 @@ import java.util.*;
 @Entity
 public class Rekening {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
     private final String iban;
+
     private float saldo;
+
     private RekeningStatus status;
+
+    @CreationTimestamp
+    private LocalDateTime created;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModified;
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "_persoon_rekening",

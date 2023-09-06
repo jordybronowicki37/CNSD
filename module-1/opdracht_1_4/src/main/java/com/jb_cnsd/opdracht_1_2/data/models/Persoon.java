@@ -1,11 +1,12 @@
 package com.jb_cnsd.opdracht_1_2.data.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,8 +16,19 @@ import java.util.Set;
 @Entity
 public class Persoon {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true, length = 9, columnDefinition = "CHAR(9)")
     private final String bsn;
-    
+
+    @CreationTimestamp
+    private LocalDateTime created;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModified;
+
+    @Column(length = 64)
     private String naam;
 
     @ManyToMany(mappedBy = "personen")

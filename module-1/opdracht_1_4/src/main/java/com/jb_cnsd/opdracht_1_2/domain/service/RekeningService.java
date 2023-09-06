@@ -5,6 +5,7 @@ import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
 import com.jb_cnsd.opdracht_1_2.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
+import com.jb_cnsd.opdracht_1_2.domain.generators.IbanGenerator;
 import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningCreateDto;
 import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningEditDto;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
@@ -18,70 +19,76 @@ import java.util.List;
 public class RekeningService {
     private final RekeningRepository rekeningRepository;
     private final PersoonRepository persoonRepository;
+    private final IbanGenerator ibanGenerator;
 
     public RekeningService(
             RekeningRepository rekeningRepository,
-            PersoonRepository persoonRepository
-    ) {
+            PersoonRepository persoonRepository,
+            IbanGenerator ibanGenerator) {
         this.rekeningRepository = rekeningRepository;
         this.persoonRepository = persoonRepository;
+        this.ibanGenerator = ibanGenerator;
     }
 
     public List<Rekening> GetAll() {
         return rekeningRepository.findAll();
     }
 
-    public Rekening Get(String iban) {
-        return findRekening(iban);
+    public Rekening Get(long id) {
+        return findRekening(id);
     }
 
-    public Rekening Create(RekeningCreateDto createDto) {
-        var persoon = findPersoon(createDto.persoonBsn());
-        var newRekening = new Rekening(createDto.iban(), persoon);
+    public Rekening Create(long persoonId) {
+        var persoon = findPersoon(persoonId);
+        var newIban = ibanGenerator.generateNewIban();
 
-        if (rekeningRepository.existsById(createDto.persoonBsn())) throw new AlreadyExistsException("Er bestaat al een rekening met deze iban!");
+        while (!rekeningRepository.existsByIban(newIban)){
+            newIban = ibanGenerator.generateNewIban();
+        }
+
+        var newRekening = new Rekening(newIban, persoon);
 
         persoon.getRekeningen().add(newRekening);
         rekeningRepository.save(newRekening);
         return newRekening;
     }
 
-    public Rekening Edit(String iban, RekeningEditDto editDto) {
-        var rekening = findRekening(iban);
+    public Rekening Edit(long id, RekeningEditDto editDto) {
+        var rekening = findRekening(id);
         rekening.setStatus(editDto.status());
         rekeningRepository.save(rekening);
         return rekening;
     }
 
-    public void Remove(String iban) {
-        var rekening = findRekening(iban);
+    public void Remove(long id) {
+        var rekening = findRekening(id);
         rekeningRepository.delete(rekening);
     }
 
-    public Rekening AddSaldo(String iban, float saldo) {
-        var rekening = findRekening(iban);
+    public Rekening AddSaldo(long id, float saldo) {
+        var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() + saldo);
         rekeningRepository.save(rekening);
         return rekening;
     }
 
-    public Rekening RemoveSaldo(String iban, float saldo) {
-        var rekening = findRekening(iban);
+    public Rekening RemoveSaldo(long id, float saldo) {
+        var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() - saldo);
         rekeningRepository.save(rekening);
         return rekening;
     }
 
-    public List<Persoon> GetPersonen(String iban) {
-        var rekening = findRekening(iban);
+    public List<Persoon> GetPersonen(long id) {
+        var rekening = findRekening(id);
         return rekening.getPersonen().stream().toList();
     }
 
-    public Rekening AddPersoon(String iban, String bsn) {
-        var rekening = findRekening(iban);
-        var persoon = findPersoon(bsn);
+    public Rekening AddPersoon(long id, long persoonId) {
+        var rekening = findRekening(id);
+        var persoon = findPersoon(persoonId);
 
         rekening.getPersonen().add(persoon);
         persoon.getRekeningen().add(rekening);
@@ -89,9 +96,9 @@ public class RekeningService {
         return rekening;
     }
 
-    public Rekening RemovePersoon(String iban, String bsn) {
-        var rekening = findRekening(iban);
-        var persoon = findPersoon(bsn);
+    public Rekening RemovePersoon(long id, long persoonId) {
+        var rekening = findRekening(id);
+        var persoon = findPersoon(persoonId);
 
         // Controleer of dit de laatste rekeninghouder is
         var personen = rekening.getPersonen();
@@ -103,14 +110,14 @@ public class RekeningService {
         return rekening;
     }
 
-    private Rekening findRekening(String iban) {
-        var optionalRekening = rekeningRepository.findById(iban);
+    private Rekening findRekening(long id) {
+        var optionalRekening = rekeningRepository.findById(id);
         if (optionalRekening.isEmpty()) throw new NotFoundException("Deze rekening is niet gevonden!");
         return optionalRekening.get();
     }
 
-    private Persoon findPersoon(String bsn) {
-        var optionalPersoon = persoonRepository.findById(bsn);
+    private Persoon findPersoon(long id) {
+        var optionalPersoon = persoonRepository.findById(id);
         if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
         return optionalPersoon.get();
     }
