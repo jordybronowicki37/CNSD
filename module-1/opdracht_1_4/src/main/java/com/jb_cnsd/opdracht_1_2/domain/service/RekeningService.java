@@ -6,9 +6,7 @@ import com.jb_cnsd.opdracht_1_2.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningCreateDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningDto;
 import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningEditDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonDto;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.RekeningException;
@@ -76,12 +74,12 @@ public class RekeningService {
         return rekening;
     }
 
-    public List<Persoon> GetHouders(String iban) {
+    public List<Persoon> GetPersonen(String iban) {
         var rekening = findRekening(iban);
         return rekening.getPersonen().stream().toList();
     }
 
-    public Rekening AddHouder(String iban, String bsn) {
+    public Rekening AddPersoon(String iban, String bsn) {
         var rekening = findRekening(iban);
         var persoon = findPersoon(bsn);
 
@@ -91,7 +89,7 @@ public class RekeningService {
         return rekening;
     }
 
-    public Rekening RemoveHouder(String iban, String bsn) {
+    public Rekening RemovePersoon(String iban, String bsn) {
         var rekening = findRekening(iban);
         var persoon = findPersoon(bsn);
 

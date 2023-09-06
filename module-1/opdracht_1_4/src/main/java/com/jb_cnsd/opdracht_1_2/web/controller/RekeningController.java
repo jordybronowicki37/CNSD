@@ -72,26 +72,18 @@ public class RekeningController {
         );
     }
 
-    @GetMapping("{iban}/houder")
-    ResponseEntity<List<PersoonDto>> GetHouders(@PathVariable String iban) {
+    @PostMapping("{iban}/persoon/{bsn}")
+    ResponseEntity<RekeningDto> AddPersoon(@PathVariable String iban, @PathVariable String bsn) {
         return new ResponseEntity<>(
-                service.GetHouders(iban).stream().map(PersoonDto::new).toList(),
+                new RekeningDto(service.AddPersoon(iban, bsn)),
                 HttpStatus.OK
         );
     }
 
-    @PostMapping("{iban}/houder/{bsn}")
-    ResponseEntity<RekeningDto> AddHouder(@PathVariable String iban, @PathVariable String bsn) {
+    @DeleteMapping("{iban}/persoon/{bsn}")
+    ResponseEntity<RekeningDto> RemovePersoon(@PathVariable String iban, @PathVariable String bsn) {
         return new ResponseEntity<>(
-                new RekeningDto(service.AddHouder(iban, bsn)),
-                HttpStatus.OK
-        );
-    }
-
-    @DeleteMapping("{iban}/houder/{bsn}")
-    ResponseEntity<RekeningDto> RemoveHouder(@PathVariable String iban, @PathVariable String bsn) {
-        return new ResponseEntity<>(
-                new RekeningDto(service.RemoveHouder(iban, bsn)),
+                new RekeningDto(service.RemovePersoon(iban, bsn)),
                 HttpStatus.OK
         );
     }
