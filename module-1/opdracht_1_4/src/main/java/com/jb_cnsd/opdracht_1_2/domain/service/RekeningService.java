@@ -2,6 +2,7 @@ package com.jb_cnsd.opdracht_1_2.domain.service;
 
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
 import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
+import com.jb_cnsd.opdracht_1_2.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningCreateDto;
@@ -61,6 +62,7 @@ public class RekeningService {
 
     public Rekening AddSaldo(String iban, float saldo) {
         var rekening = findRekening(iban);
+        if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() + saldo);
         rekeningRepository.save(rekening);
         return rekening;
@@ -68,6 +70,7 @@ public class RekeningService {
 
     public Rekening RemoveSaldo(String iban, float saldo) {
         var rekening = findRekening(iban);
+        if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() - saldo);
         rekeningRepository.save(rekening);
         return rekening;
