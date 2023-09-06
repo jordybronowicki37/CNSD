@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
-    @ExceptionHandler({NotFoundException.class, RekeningException.class})
-    public ResponseEntity<String> handleCustomException(RuntimeException ex) {
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<String> handleCustomException(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({RekeningException.class})
+    public ResponseEntity<String> handleCustomException(RekeningException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AlreadyExistsException.class)
