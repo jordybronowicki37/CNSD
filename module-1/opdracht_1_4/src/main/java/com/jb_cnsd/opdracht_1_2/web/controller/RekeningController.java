@@ -1,7 +1,10 @@
 package com.jb_cnsd.opdracht_1_2.web.controller;
 
 import com.jb_cnsd.opdracht_1_2.domain.service.RekeningService;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.*;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.RekeningCreateRequest;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.RekeningEditRequest;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.SaldoChangeRequest;
+import com.jb_cnsd.opdracht_1_2.web.dto.responses.RekeningResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,9 +28,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "200", description = "Rekeningen gevonden"),
     })
     @GetMapping("")
-    ResponseEntity<List<RekeningDto>> GetAll() {
+    ResponseEntity<List<RekeningResponse>> GetAll() {
         return new ResponseEntity<>(
-                service.GetAll().stream().map(RekeningDto::new).toList(),
+                service.GetAll().stream().map(RekeningResponse::new).toList(),
                 HttpStatus.OK
         );
     }
@@ -37,9 +40,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @GetMapping("{rekeningId}")
-    ResponseEntity<RekeningDto> Get(@PathVariable long rekeningId) {
+    ResponseEntity<RekeningResponse> Get(@PathVariable long rekeningId) {
         return new ResponseEntity<>(
-                new RekeningDto(service.Get(rekeningId)),
+                new RekeningResponse(service.Get(rekeningId)),
                 HttpStatus.OK
         );
     }
@@ -50,9 +53,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("")
-    ResponseEntity<RekeningDto> Create(@RequestBody RekeningCreateDto body) {
+    ResponseEntity<RekeningResponse> Create(@RequestBody RekeningCreateRequest body) {
         return new ResponseEntity<>(
-                new RekeningDto(service.Create(body.persoonId())),
+                new RekeningResponse(service.Create(body.persoonId())),
                 HttpStatus.CREATED
         );
     }
@@ -63,9 +66,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PutMapping("{rekeningId}")
-    ResponseEntity<RekeningDto> Create(@PathVariable long rekeningId, @RequestBody RekeningEditDto body) {
+    ResponseEntity<RekeningResponse> Create(@PathVariable long rekeningId, @RequestBody RekeningEditRequest body) {
         return new ResponseEntity<>(
-                new RekeningDto(service.Edit(rekeningId, body)),
+                new RekeningResponse(service.Edit(rekeningId, body)),
                 HttpStatus.OK
         );
     }
@@ -87,9 +90,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{rekeningId}/saldo")
-    ResponseEntity<RekeningDto> AddHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoDto body) {
+    ResponseEntity<RekeningResponse> AddHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
-                new RekeningDto(service.AddSaldo(rekeningId, body.getSaldo())),
+                new RekeningResponse(service.AddSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
         );
     }
@@ -100,9 +103,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{rekeningId}/saldo")
-    ResponseEntity<RekeningDto> RemoveHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoDto body) {
+    ResponseEntity<RekeningResponse> RemoveHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
-                new RekeningDto(service.RemoveSaldo(rekeningId, body.getSaldo())),
+                new RekeningResponse(service.RemoveSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
         );
     }
@@ -113,9 +116,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{rekeningId}/persoon/{persoonId}")
-    ResponseEntity<RekeningDto> AddPersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
+    ResponseEntity<RekeningResponse> AddPersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new RekeningDto(service.AddPersoon(rekeningId, persoonId)),
+                new RekeningResponse(service.AddPersoon(rekeningId, persoonId)),
                 HttpStatus.OK
         );
     }
@@ -126,9 +129,9 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{rekeningId}/persoon/{persoonId}")
-    ResponseEntity<RekeningDto> RemovePersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
+    ResponseEntity<RekeningResponse> RemovePersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new RekeningDto(service.RemovePersoon(rekeningId, persoonId)),
+                new RekeningResponse(service.RemovePersoon(rekeningId, persoonId)),
                 HttpStatus.OK
         );
     }

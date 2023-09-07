@@ -2,9 +2,8 @@ package com.jb_cnsd.opdracht_1_2.domain.service;
 
 import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonCreateDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonEditDto;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonCreateRequest;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonEditRequest;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class PersoonService {
         return optionalPersoon.get();
     }
 
-    public Persoon Create(PersoonCreateDto createDto) {
+    public Persoon Create(PersoonCreateRequest createDto) {
         var nieuwePersoon = new Persoon(createDto.bsn(), createDto.naam());
         if (persoonRepository.existsByBsn(createDto.bsn()))
             throw new AlreadyExistsException("Er bestaat al een persoon met deze bsn!");
@@ -40,7 +39,7 @@ public class PersoonService {
         return nieuwePersoon;
     }
 
-    public Persoon Edit(long id, PersoonEditDto editDto) {
+    public Persoon Edit(long id, PersoonEditRequest editDto) {
         var persoon = Get(id);
 
         persoon.setNaam(editDto.naam());

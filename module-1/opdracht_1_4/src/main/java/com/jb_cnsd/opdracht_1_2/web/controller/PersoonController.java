@@ -1,12 +1,13 @@
 package com.jb_cnsd.opdracht_1_2.web.controller;
 
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonCreateDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.PersoonEditDto;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonCreateRequest;
+import com.jb_cnsd.opdracht_1_2.web.dto.responses.PersoonResponse;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonEditRequest;
 import com.jb_cnsd.opdracht_1_2.domain.service.PersoonService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class PersoonController {
             @ApiResponse(responseCode = "200", description = "Personen gevonden"),
     })
     @GetMapping("")
-    ResponseEntity<List<PersoonDto>> GetAll() {
+    ResponseEntity<List<PersoonResponse>> GetAll() {
         return new ResponseEntity<>(
-                service.GetAll().stream().map(PersoonDto::new).toList(),
+                service.GetAll().stream().map(PersoonResponse::new).toList(),
                 HttpStatus.OK
         );
     }
@@ -38,9 +39,9 @@ public class PersoonController {
             @ApiResponse(responseCode = "404", description = "Persoon is niet gevonden", content = @Content),
     })
     @GetMapping("{persoonId}")
-    ResponseEntity<PersoonDto> Get(@PathVariable long persoonId) {
+    ResponseEntity<PersoonResponse> Get(@PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new PersoonDto(service.Get(persoonId)),
+                new PersoonResponse(service.Get(persoonId)),
                 HttpStatus.OK
         );
     }
@@ -51,9 +52,9 @@ public class PersoonController {
             @ApiResponse(responseCode = "409", description = "Er bestaat al een persoon met deze credentials", content = @Content),
     })
     @PostMapping("")
-    ResponseEntity<PersoonDto> Create(@RequestBody PersoonCreateDto body) {
+    ResponseEntity<PersoonResponse> Create(@Valid @RequestBody PersoonCreateRequest body) {
         return new ResponseEntity<>(
-                new PersoonDto(service.Create(body)),
+                new PersoonResponse(service.Create(body)),
                 HttpStatus.CREATED
         );
     }
@@ -63,9 +64,9 @@ public class PersoonController {
             @ApiResponse(responseCode = "400", description = "Invalide argumenten meegegeven", content = @Content),
     })
     @PutMapping("{persoonId}")
-    ResponseEntity<PersoonDto> Edit(@PathVariable long persoonId, @RequestBody PersoonEditDto body) {
+    ResponseEntity<PersoonResponse> Edit(@PathVariable long persoonId, @RequestBody PersoonEditRequest body) {
         return new ResponseEntity<>(
-                new PersoonDto(service.Edit(persoonId, body)),
+                new PersoonResponse(service.Edit(persoonId, body)),
                 HttpStatus.OK
         );
     }
