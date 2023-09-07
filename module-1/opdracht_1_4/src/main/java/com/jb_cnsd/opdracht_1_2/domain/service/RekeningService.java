@@ -6,9 +6,7 @@ import com.jb_cnsd.opdracht_1_2.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_1_2.domain.generators.IbanGenerator;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningCreateDto;
-import com.jb_cnsd.opdracht_1_2.web.controller.dto.RekeningEditDto;
-import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
+import com.jb_cnsd.opdracht_1_2.web.dto.requests.RekeningEditRequest;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.RekeningException;
 import org.springframework.stereotype.Service;
@@ -54,7 +52,7 @@ public class RekeningService {
         return newRekening;
     }
 
-    public Rekening Edit(long id, RekeningEditDto editDto) {
+    public Rekening Edit(long id, RekeningEditRequest editDto) {
         var rekening = findRekening(id);
         rekening.setStatus(editDto.status());
         rekeningRepository.save(rekening);
