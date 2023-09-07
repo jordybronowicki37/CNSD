@@ -37,10 +37,10 @@ public class PersoonController {
             @ApiResponse(responseCode = "200", description = "Persoon gevonden"),
             @ApiResponse(responseCode = "404", description = "Persoon is niet gevonden", content = @Content),
     })
-    @GetMapping("{bsn}")
-    ResponseEntity<PersoonDto> Get(@PathVariable long bsn) {
+    @GetMapping("{persoonId}")
+    ResponseEntity<PersoonDto> Get(@PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new PersoonDto(service.Get(bsn)),
+                new PersoonDto(service.Get(persoonId)),
                 HttpStatus.OK
         );
     }
@@ -62,10 +62,10 @@ public class PersoonController {
             @ApiResponse(responseCode = "200", description = "Persoon aangepast"),
             @ApiResponse(responseCode = "400", description = "Invalide argumenten meegegeven", content = @Content),
     })
-    @PutMapping("{bsn}")
-    ResponseEntity<PersoonDto> Edit(@PathVariable long bsn, @RequestBody PersoonEditDto body) {
+    @PutMapping("{persoonId}")
+    ResponseEntity<PersoonDto> Edit(@PathVariable long persoonId, @RequestBody PersoonEditDto body) {
         return new ResponseEntity<>(
-                new PersoonDto(service.Edit(bsn, body)),
+                new PersoonDto(service.Edit(persoonId, body)),
                 HttpStatus.OK
         );
     }
@@ -74,9 +74,9 @@ public class PersoonController {
             @ApiResponse(responseCode = "204", description = "Persoon verwijderd"),
             @ApiResponse(responseCode = "404", description = "Persoon is niet gevonden", content = @Content),
     })
-    @DeleteMapping("{bsn}")
-    ResponseEntity<Void> Remove(@PathVariable long bsn) {
-        service.Remove(bsn);
+    @DeleteMapping("{persoonId}")
+    ResponseEntity<Void> Remove(@PathVariable long persoonId) {
+        service.Remove(persoonId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
