@@ -40,9 +40,10 @@ public class RekeningService {
 
     public Rekening Create(long persoonId) {
         var persoon = findPersoon(persoonId);
-        var newIban = ibanGenerator.generateNewIban();
 
-        while (!rekeningRepository.existsByIban(newIban)){
+        // Generate a unique iban
+        var newIban = ibanGenerator.generateNewIban();
+        while (rekeningRepository.existsByIban(newIban)){
             newIban = ibanGenerator.generateNewIban();
         }
 
@@ -79,11 +80,6 @@ public class RekeningService {
         rekening.setSaldo(rekening.getSaldo() - saldo);
         rekeningRepository.save(rekening);
         return rekening;
-    }
-
-    public List<Persoon> GetPersonen(long id) {
-        var rekening = findRekening(id);
-        return rekening.getPersonen().stream().toList();
     }
 
     public Rekening AddPersoon(long id, long persoonId) {
