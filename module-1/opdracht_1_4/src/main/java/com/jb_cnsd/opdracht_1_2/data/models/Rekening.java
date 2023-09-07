@@ -12,23 +12,13 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
-public class Rekening {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+public class Rekening extends BaseEntity {
     @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
     private final String iban;
 
     private float saldo;
 
     private RekeningStatus status;
-
-    @CreationTimestamp
-    private LocalDateTime created;
-
-    @UpdateTimestamp
-    private LocalDateTime lastModified;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(

@@ -14,19 +14,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-public class Persoon {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+public class Persoon extends BaseEntity {
     @Column(unique = true, length = 9, columnDefinition = "CHAR(9)")
     private final String bsn;
-
-    @CreationTimestamp
-    private LocalDateTime created;
-
-    @UpdateTimestamp
-    private LocalDateTime lastModified;
 
     @Column(length = 64)
     private String naam;
