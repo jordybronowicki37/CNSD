@@ -100,7 +100,7 @@ public class RekeningService {
 
         rekening.getPersonen().remove(persoon);
         persoon.getRekeningen().remove(rekening);
-
+        rekeningRepository.save(rekening);
         return rekening;
     }
 
