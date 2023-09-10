@@ -14,7 +14,7 @@
 2. Add `prod` profile to spring.
 3. Start the application.
 4. Go to http://localhost:8080/swagger-ui/index.html for the swagger page.
-5. Go to http://localhost:8080/browser/ for the pg-admin page.
+5. Go to http://localhost:5433/browser/ for the pg-admin page.
    1. Log in with the following credentials:
       * Email: `postgres@example.com`
       * Password: `postgres`
