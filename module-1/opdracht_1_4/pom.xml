@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jb_cnsd</groupId>
     <artifactId>opdracht_1_4</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.4</version>
     <name>opdracht_1_4</name>
     <description>opdracht_1_4</description>
     <properties>
