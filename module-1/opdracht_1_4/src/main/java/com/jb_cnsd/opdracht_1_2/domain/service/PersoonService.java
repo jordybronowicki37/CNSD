@@ -6,6 +6,7 @@ import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonCreateRequest;
 import com.jb_cnsd.opdracht_1_2.web.dto.requests.PersoonEditRequest;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +21,14 @@ public class PersoonService {
         this.persoonRepository = persoonRepository;
     }
 
+    @Cacheable(value = "personen")
     public List<Persoon> GetAll() {
         return persoonRepository.findAll();
     }
 
+    @Cacheable(value = "personen", key = "#id")
     public Persoon Get(long id) {
-        var optionalPersoon = persoonRepository.findById(id);
-        if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
-        return optionalPersoon.get();
+        return findPersoon(id);
     }
 
     public Persoon Create(PersoonCreateRequest createDto) {
@@ -40,7 +41,7 @@ public class PersoonService {
     }
 
     public Persoon Edit(long id, PersoonEditRequest editDto) {
-        var persoon = Get(id);
+        var persoon = findPersoon(id);
 
         persoon.setNaam(editDto.naam());
         persoonRepository.save(persoon);
@@ -48,6 +49,12 @@ public class PersoonService {
     }
 
     public void Remove(long id) {
-        persoonRepository.delete(Get(id));
+        persoonRepository.delete(findPersoon(id));
+    }
+
+    private Persoon findPersoon(long id) {
+        var optionalPersoon = persoonRepository.findById(id);
+        if (optionalPersoon.isEmpty()) throw new NotFoundException("Deze persoon is niet gevonden!");
+        return optionalPersoon.get();
     }
 }

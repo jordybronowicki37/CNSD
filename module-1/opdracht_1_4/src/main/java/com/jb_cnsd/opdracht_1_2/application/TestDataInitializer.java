@@ -3,7 +3,6 @@ package com.jb_cnsd.opdracht_1_2.application;
 import com.jb_cnsd.opdracht_1_2.data.models.Persoon;
 import com.jb_cnsd.opdracht_1_2.data.models.Rekening;
 import com.jb_cnsd.opdracht_1_2.data.models.RekeningStatus;
-import com.jb_cnsd.opdracht_1_2.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_1_2.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_1_2.domain.generators.IbanGenerator;
 import org.springframework.context.annotation.Profile;

@@ -9,6 +9,7 @@ import com.jb_cnsd.opdracht_1_2.domain.generators.IbanGenerator;
 import com.jb_cnsd.opdracht_1_2.web.dto.requests.RekeningEditRequest;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_1_2.domain.exceptions.RekeningException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,10 +29,12 @@ public class RekeningService {
         this.ibanGenerator = ibanGenerator;
     }
 
+    @Cacheable(value = "rekeningen")
     public List<Rekening> GetAll() {
         return rekeningRepository.findAll();
     }
 
+    @Cacheable(value = "rekeningen", key = "#id")
     public Rekening Get(long id) {
         return findRekening(id);
     }
