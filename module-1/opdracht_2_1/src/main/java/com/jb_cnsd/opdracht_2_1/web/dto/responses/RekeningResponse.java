@@ -10,7 +10,7 @@ public record RekeningResponse(long id, String iban, float saldo, RekeningStatus
     public RekeningResponse(Rekening rekening) {
         this(
                 rekening.getId(),
-                rekening.getIban(),
+                rekening.getIban().toString(),
                 rekening.getSaldo(),
                 rekening.getStatus(),
                 rekening.getPersonen().stream().map(Persoon::getId).toList()

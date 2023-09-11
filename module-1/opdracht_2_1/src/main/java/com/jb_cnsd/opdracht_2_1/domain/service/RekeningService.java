@@ -1,11 +1,11 @@
 package com.jb_cnsd.opdracht_2_1.domain.service;
 
+import com.jb_cnsd.opdracht_2_1.data.models.Iban;
 import com.jb_cnsd.opdracht_2_1.data.models.Rekening;
 import com.jb_cnsd.opdracht_2_1.data.models.Persoon;
 import com.jb_cnsd.opdracht_2_1.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_2_1.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_2_1.data.repository.RekeningRepository;
-import com.jb_cnsd.opdracht_2_1.domain.generators.IbanGenerator;
 import com.jb_cnsd.opdracht_2_1.web.dto.requests.RekeningEditRequest;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.RekeningException;
@@ -18,15 +18,12 @@ import java.util.List;
 public class RekeningService {
     private final RekeningRepository rekeningRepository;
     private final PersoonRepository persoonRepository;
-    private final IbanGenerator ibanGenerator;
 
     public RekeningService(
             RekeningRepository rekeningRepository,
-            PersoonRepository persoonRepository,
-            IbanGenerator ibanGenerator) {
+            PersoonRepository persoonRepository) {
         this.rekeningRepository = rekeningRepository;
         this.persoonRepository = persoonRepository;
-        this.ibanGenerator = ibanGenerator;
     }
 
     @Cacheable(value = "rekeningen")
@@ -43,9 +40,9 @@ public class RekeningService {
         var persoon = findPersoon(persoonId);
 
         // Generate a unique iban
-        var newIban = ibanGenerator.generateNewIban();
+        var newIban = Iban.random();
         while (rekeningRepository.existsByIban(newIban)){
-            newIban = ibanGenerator.generateNewIban();
+            newIban = Iban.random();
         }
 
         var newRekening = new Rekening(newIban, persoon);

@@ -10,8 +10,8 @@ import java.util.*;
 @Setter
 @Entity
 public class Rekening extends BaseEntity {
-    @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
-    private final String iban;
+    @Embedded
+    private final Iban iban;
 
     private float saldo;
 
@@ -26,11 +26,11 @@ public class Rekening extends BaseEntity {
     private final Set<Persoon> personen;
 
     protected Rekening() {
-        this.iban = "";
+        this.iban = Iban.random();
         this.personen = new HashSet<>();
     }
 
-    public Rekening(String iban, Persoon personen) {
+    public Rekening(Iban iban, Persoon personen) {
         this.iban = iban;
         saldo = 0;
         status = RekeningStatus.NORMAAL;
