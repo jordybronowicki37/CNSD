@@ -15,6 +15,8 @@ public class Rekening extends BaseEntity {
 
     private float saldo;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 16)
     private RekeningStatus status;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
