@@ -6,6 +6,7 @@ import com.jb_cnsd.opdracht_2_1.data.models.Persoon;
 import com.jb_cnsd.opdracht_2_1.data.models.RekeningStatus;
 import com.jb_cnsd.opdracht_2_1.data.repository.PersoonRepository;
 import com.jb_cnsd.opdracht_2_1.data.repository.RekeningRepository;
+import com.jb_cnsd.opdracht_2_1.domain.exceptions.NegativeSaldoValueException;
 import com.jb_cnsd.opdracht_2_1.web.dto.requests.RekeningEditRequest;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.RekeningException;
@@ -60,6 +61,7 @@ public class RekeningService {
     }
 
     public Rekening AddSaldo(long id, float saldo) {
+        if (saldo < 0) throw new NegativeSaldoValueException();
         var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() + saldo);
@@ -68,6 +70,7 @@ public class RekeningService {
     }
 
     public Rekening RemoveSaldo(long id, float saldo) {
+        if (saldo < 0) throw new NegativeSaldoValueException();
         var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
         rekening.setSaldo(rekening.getSaldo() - saldo);
