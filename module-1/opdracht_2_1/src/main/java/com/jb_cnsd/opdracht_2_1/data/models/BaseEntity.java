@@ -1,6 +1,7 @@
 package com.jb_cnsd.opdracht_2_1.data.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
+@EqualsAndHashCode
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

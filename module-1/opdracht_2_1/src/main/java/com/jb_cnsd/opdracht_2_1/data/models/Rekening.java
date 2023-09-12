@@ -1,6 +1,7 @@
 package com.jb_cnsd.opdracht_2_1.data.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +10,10 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Rekening extends BaseEntity {
     @Embedded
+    @EqualsAndHashCode.Include
     private final Iban iban;
 
     private float saldo;
@@ -37,18 +40,5 @@ public class Rekening extends BaseEntity {
         saldo = 0;
         status = RekeningStatus.NORMAAL;
         this.personen = new HashSet<>(Set.of(personen));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Rekening rekening = (Rekening) o;
-        return Objects.equals(iban, rekening.iban);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(iban);
     }
 }

@@ -1,18 +1,20 @@
 package com.jb_cnsd.opdracht_2_1.data.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Persoon extends BaseEntity {
     @Column(unique = true, length = 9, columnDefinition = "CHAR(9)")
+    @EqualsAndHashCode.Include
     private final String bsn;
 
     @Column(length = 64)
@@ -30,18 +32,5 @@ public class Persoon extends BaseEntity {
         this.bsn = bsn;
         this.naam = naam;
         rekeningen = new HashSet<>();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Persoon that = (Persoon) o;
-        return Objects.equals(bsn, that.bsn);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bsn);
     }
 }
