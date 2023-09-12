@@ -1,16 +1,14 @@
 package com.jb_cnsd.opdracht_2_1.application;
 
+import lombok.AllArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CacheService {
     private final CacheManager cacheManager;
-
-    public CacheService(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
-    }
 
     @Scheduled(fixedRate = 60000)
     public void clearCache() {

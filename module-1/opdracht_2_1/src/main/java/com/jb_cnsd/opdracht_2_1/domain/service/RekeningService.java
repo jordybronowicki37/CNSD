@@ -9,22 +9,17 @@ import com.jb_cnsd.opdracht_2_1.data.repository.RekeningRepository;
 import com.jb_cnsd.opdracht_2_1.web.dto.requests.RekeningEditRequest;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.NotFoundException;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.RekeningException;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class RekeningService {
     private final RekeningRepository rekeningRepository;
     private final PersoonRepository persoonRepository;
-
-    public RekeningService(
-            RekeningRepository rekeningRepository,
-            PersoonRepository persoonRepository) {
-        this.rekeningRepository = rekeningRepository;
-        this.persoonRepository = persoonRepository;
-    }
 
     @Cacheable(value = "rekeningen")
     public List<Rekening> GetAll() {

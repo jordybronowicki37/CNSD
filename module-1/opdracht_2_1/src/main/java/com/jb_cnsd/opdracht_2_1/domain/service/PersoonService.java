@@ -6,20 +6,16 @@ import com.jb_cnsd.opdracht_2_1.web.dto.requests.PersoonCreateRequest;
 import com.jb_cnsd.opdracht_2_1.web.dto.requests.PersoonEditRequest;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.AlreadyExistsException;
 import com.jb_cnsd.opdracht_2_1.domain.exceptions.NotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PersoonService {
     private final PersoonRepository persoonRepository;
-
-    public PersoonService(
-            PersoonRepository persoonRepository
-    ) {
-        this.persoonRepository = persoonRepository;
-    }
 
     @Cacheable(value = "personen")
     public List<Persoon> GetAll() {

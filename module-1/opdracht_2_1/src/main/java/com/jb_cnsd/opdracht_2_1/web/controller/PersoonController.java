@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("persoon")
+@AllArgsConstructor
 public class PersoonController {
     private final PersoonService service;
-
-    public PersoonController(PersoonService service) {
-        this.service = service;
-    }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Personen gevonden"),

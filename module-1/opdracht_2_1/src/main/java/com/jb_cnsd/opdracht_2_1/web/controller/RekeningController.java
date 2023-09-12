@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("rekening")
+@AllArgsConstructor
 public class RekeningController {
     private final RekeningService service;
-
-    public RekeningController(RekeningService service) {
-        this.service = service;
-    }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rekeningen gevonden"),
