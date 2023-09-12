@@ -28,7 +28,7 @@ public class RekeningController {
     @GetMapping("")
     ResponseEntity<List<RekeningResponse>> GetAll() {
         return new ResponseEntity<>(
-                service.GetAll().stream().map(RekeningResponse::new).toList(),
+                service.getAll().stream().map(RekeningResponse::new).toList(),
                 HttpStatus.OK
         );
     }
@@ -40,7 +40,7 @@ public class RekeningController {
     @GetMapping("{rekeningId}")
     ResponseEntity<RekeningResponse> Get(@PathVariable long rekeningId) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.Get(rekeningId)),
+                new RekeningResponse(service.get(rekeningId)),
                 HttpStatus.OK
         );
     }
@@ -53,7 +53,7 @@ public class RekeningController {
     @PostMapping("")
     ResponseEntity<RekeningResponse> Create(@RequestBody RekeningCreateRequest body) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.Create(body.persoonId())),
+                new RekeningResponse(service.create(body.persoonId())),
                 HttpStatus.CREATED
         );
     }
@@ -66,7 +66,7 @@ public class RekeningController {
     @PutMapping("{rekeningId}")
     ResponseEntity<RekeningResponse> Create(@PathVariable long rekeningId, @RequestBody RekeningEditRequest body) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.Edit(rekeningId, body)),
+                new RekeningResponse(service.edit(rekeningId, body)),
                 HttpStatus.OK
         );
     }
@@ -78,7 +78,7 @@ public class RekeningController {
     })
     @DeleteMapping("{rekeningId}")
     ResponseEntity<Void> Remove(@PathVariable long rekeningId) {
-        service.Remove(rekeningId);
+        service.remove(rekeningId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -90,7 +90,7 @@ public class RekeningController {
     @PostMapping("{rekeningId}/saldo")
     ResponseEntity<RekeningResponse> AddHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.AddSaldo(rekeningId, body.saldo())),
+                new RekeningResponse(service.addSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
         );
     }
@@ -103,7 +103,7 @@ public class RekeningController {
     @DeleteMapping("{rekeningId}/saldo")
     ResponseEntity<RekeningResponse> RemoveHouder(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.RemoveSaldo(rekeningId, body.saldo())),
+                new RekeningResponse(service.removeSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
         );
     }
@@ -116,7 +116,7 @@ public class RekeningController {
     @PostMapping("{rekeningId}/persoon/{persoonId}")
     ResponseEntity<RekeningResponse> AddPersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.AddPersoon(rekeningId, persoonId)),
+                new RekeningResponse(service.addPersoon(rekeningId, persoonId)),
                 HttpStatus.OK
         );
     }
@@ -129,7 +129,7 @@ public class RekeningController {
     @DeleteMapping("{rekeningId}/persoon/{persoonId}")
     ResponseEntity<RekeningResponse> RemovePersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new RekeningResponse(service.RemovePersoon(rekeningId, persoonId)),
+                new RekeningResponse(service.removePersoon(rekeningId, persoonId)),
                 HttpStatus.OK
         );
     }

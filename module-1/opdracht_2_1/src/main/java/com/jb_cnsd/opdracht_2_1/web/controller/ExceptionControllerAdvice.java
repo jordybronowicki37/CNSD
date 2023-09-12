@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
     @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<String> handleCustomException(NotFoundException ex) {
+    public ResponseEntity<String> handleNotFoundExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({RekeningException.class})
-    public ResponseEntity<String> handleCustomException(RekeningException ex) {
+    public ResponseEntity<String> handleBadRequestExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<String> handleCustomException(AlreadyExistsException ex) {
+    public ResponseEntity<String> handleConflictExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

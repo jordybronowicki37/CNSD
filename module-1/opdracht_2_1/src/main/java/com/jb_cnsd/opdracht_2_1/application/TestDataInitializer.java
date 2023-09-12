@@ -19,11 +19,11 @@ public class TestDataInitializer {
     public TestDataInitializer(
             RekeningRepository rekeningRepository) {
         this.rekeningRepository = rekeningRepository;
-        Initialize();
+        initialize();
     }
 
     @Transient
-    private void Initialize() {
+    private void initialize() {
         var p1 = new Persoon("123456789", "Chris");
         var p2 = new Persoon("012345678", "Sarah");
 

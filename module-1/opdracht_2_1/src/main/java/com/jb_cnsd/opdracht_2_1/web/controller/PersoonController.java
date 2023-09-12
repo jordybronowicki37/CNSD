@@ -27,7 +27,7 @@ public class PersoonController {
     @GetMapping("")
     ResponseEntity<List<PersoonResponse>> GetAll() {
         return new ResponseEntity<>(
-                service.GetAll().stream().map(PersoonResponse::new).toList(),
+                service.getAll().stream().map(PersoonResponse::new).toList(),
                 HttpStatus.OK
         );
     }
@@ -39,7 +39,7 @@ public class PersoonController {
     @GetMapping("{persoonId}")
     ResponseEntity<PersoonResponse> Get(@PathVariable long persoonId) {
         return new ResponseEntity<>(
-                new PersoonResponse(service.Get(persoonId)),
+                new PersoonResponse(service.get(persoonId)),
                 HttpStatus.OK
         );
     }
@@ -52,7 +52,7 @@ public class PersoonController {
     @PostMapping("")
     ResponseEntity<PersoonResponse> Create(@Valid @RequestBody PersoonCreateRequest body) {
         return new ResponseEntity<>(
-                new PersoonResponse(service.Create(body)),
+                new PersoonResponse(service.create(body)),
                 HttpStatus.CREATED
         );
     }
@@ -64,7 +64,7 @@ public class PersoonController {
     @PutMapping("{persoonId}")
     ResponseEntity<PersoonResponse> Edit(@PathVariable long persoonId, @RequestBody PersoonEditRequest body) {
         return new ResponseEntity<>(
-                new PersoonResponse(service.Edit(persoonId, body)),
+                new PersoonResponse(service.edit(persoonId, body)),
                 HttpStatus.OK
         );
     }
@@ -75,7 +75,7 @@ public class PersoonController {
     })
     @DeleteMapping("{persoonId}")
     ResponseEntity<Void> Remove(@PathVariable long persoonId) {
-        service.Remove(persoonId);
+        service.remove(persoonId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

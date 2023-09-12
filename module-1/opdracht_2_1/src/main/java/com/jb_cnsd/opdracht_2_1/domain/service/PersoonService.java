@@ -18,16 +18,16 @@ public class PersoonService {
     private final PersoonRepository persoonRepository;
 
     @Cacheable(value = "personen")
-    public List<Persoon> GetAll() {
+    public List<Persoon> getAll() {
         return persoonRepository.findAll();
     }
 
     @Cacheable(value = "personen", key = "#id")
-    public Persoon Get(long id) {
+    public Persoon get(long id) {
         return findPersoon(id);
     }
 
-    public Persoon Create(PersoonCreateRequest createDto) {
+    public Persoon create(PersoonCreateRequest createDto) {
         var nieuwePersoon = new Persoon(createDto.bsn(), createDto.naam());
         if (persoonRepository.existsByBsn(createDto.bsn()))
             throw new AlreadyExistsException("Er bestaat al een persoon met deze bsn!");
@@ -36,7 +36,7 @@ public class PersoonService {
         return nieuwePersoon;
     }
 
-    public Persoon Edit(long id, PersoonEditRequest editDto) {
+    public Persoon edit(long id, PersoonEditRequest editDto) {
         var persoon = findPersoon(id);
 
         persoon.setNaam(editDto.naam());
@@ -44,7 +44,7 @@ public class PersoonService {
         return persoon;
     }
 
-    public void Remove(long id) {
+    public void remove(long id) {
         persoonRepository.delete(findPersoon(id));
     }
 

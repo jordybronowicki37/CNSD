@@ -23,16 +23,16 @@ public class RekeningService {
     private final PersoonRepository persoonRepository;
 
     @Cacheable(value = "rekeningen")
-    public List<Rekening> GetAll() {
+    public List<Rekening> getAll() {
         return rekeningRepository.findAll();
     }
 
     @Cacheable(value = "rekeningen", key = "#id")
-    public Rekening Get(long id) {
+    public Rekening get(long id) {
         return findRekening(id);
     }
 
-    public Rekening Create(long persoonId) {
+    public Rekening create(long persoonId) {
         var persoon = findPersoon(persoonId);
 
         // Generate a unique iban
@@ -48,19 +48,19 @@ public class RekeningService {
         return newRekening;
     }
 
-    public Rekening Edit(long id, RekeningEditRequest editDto) {
+    public Rekening edit(long id, RekeningEditRequest editDto) {
         var rekening = findRekening(id);
         rekening.setStatus(editDto.status());
         rekeningRepository.save(rekening);
         return rekening;
     }
 
-    public void Remove(long id) {
+    public void remove(long id) {
         var rekening = findRekening(id);
         rekeningRepository.delete(rekening);
     }
 
-    public Rekening AddSaldo(long id, float saldo) {
+    public Rekening addSaldo(long id, float saldo) {
         if (saldo < 0) throw new NegativeSaldoValueException();
         var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
@@ -69,7 +69,7 @@ public class RekeningService {
         return rekening;
     }
 
-    public Rekening RemoveSaldo(long id, float saldo) {
+    public Rekening removeSaldo(long id, float saldo) {
         if (saldo < 0) throw new NegativeSaldoValueException();
         var rekening = findRekening(id);
         if (rekening.getStatus() == RekeningStatus.GEBLOKKEERD) throw new RekeningException("De rekening is geblokkeerd");
@@ -78,7 +78,7 @@ public class RekeningService {
         return rekening;
     }
 
-    public Rekening AddPersoon(long id, long persoonId) {
+    public Rekening addPersoon(long id, long persoonId) {
         var rekening = findRekening(id);
         var persoon = findPersoon(persoonId);
 
@@ -88,7 +88,7 @@ public class RekeningService {
         return rekening;
     }
 
-    public Rekening RemovePersoon(long id, long persoonId) {
+    public Rekening removePersoon(long id, long persoonId) {
         var rekening = findRekening(id);
         var persoon = findPersoon(persoonId);
 
