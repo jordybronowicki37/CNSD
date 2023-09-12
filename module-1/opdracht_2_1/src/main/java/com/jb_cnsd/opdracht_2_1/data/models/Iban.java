@@ -1,12 +1,13 @@
 package com.jb_cnsd.opdracht_2_1.data.models;
 
 import jakarta.persistence.Column;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Random;
 
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Iban {
     @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
     private String iban;
