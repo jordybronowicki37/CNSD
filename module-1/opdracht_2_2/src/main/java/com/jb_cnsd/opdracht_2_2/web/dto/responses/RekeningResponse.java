@@ -6,7 +6,7 @@ import com.jb_cnsd.opdracht_2_2.data.models.RekeningStatus;
 
 import java.util.List;
 
-public record RekeningResponse(long id, String iban, float saldo, RekeningStatus status, List<Long> rekeningHouders) {
+public record RekeningResponse(long id, String iban, float saldo, RekeningStatus status, List<Long> personen) {
     public RekeningResponse(Rekening rekening) {
         this(
                 rekening.getId(),
