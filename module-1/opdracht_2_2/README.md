@@ -29,16 +29,12 @@
 ### Unit testing
 Jacoco Report
 ![Jacoco report](/docs/jacoco-report.png)
-In the Jacoco report above, you can see that the majority of the tests are testing 
-classes from the domain.service and the data.models folder. The coverage percentage is
-not yet on the level of 80%, which is the minimum for many software companies. In the 
-integration testing fase I hope to increase this number.
+In the Jacoco report above, you can see that the test coverage has increased compared 
+to the results in the unit testing assignment. Especially in the web.controller folder
+but also the data.models folder.
 
 ### Mutation testing
 PITest report
 ![PITest report](/docs/pitest-report.png)
-The majority of the mutations are created in the data.models folder. The classes in
-this folder contain Lombok annotations. These annotations automatically generate some
-of the standard method implementations that pojo's normally contain. PITest created 
-the majority of the mutations in these generated methods from Lombok, which are not
-as interesting.
+When we look at the new version of the PITest report, then we can see that the mutations
+coverage of the web.controller has significantly improved.
