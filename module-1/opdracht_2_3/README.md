@@ -29,12 +29,12 @@
 ### Unit testing
 Jacoco Report
 ![Jacoco report](/docs/jacoco-report.png)
-In the Jacoco report above, you can see that the test coverage has increased compared 
-to the results in the unit testing assignment. Especially in the web.controller folder
-but also the data.models folder.
+In the Jacoco report above, you can see that the test coverage has slightly increased 
+compared to the results of the integration testing assignment. The majority of the
+improvements were in the web.controller and the domain.service folders.
 
 ### Mutation testing
 PITest report
 ![PITest report](/docs/pitest-report.png)
-When we look at the new version of the PITest report, then we can see that the mutations
-coverage of the web.controller has significantly improved.
+The mutation coverage has not changed due to the introduction of the cucumber functional
+tests.
