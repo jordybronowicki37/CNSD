@@ -38,3 +38,9 @@ PITest report
 ![PITest report](/docs/pitest-report.png)
 The mutation coverage has not changed due to the introduction of the cucumber functional
 tests.
+
+## Docker
+How to run the project in a container:
+1. Create the package ```mvn install```
+2. Build the container: ```docker build -f Dockerfile -t cnsd-bank .```
+3. Start the container: ```docker run -p 8080:8080 -t cnsd-bank```
