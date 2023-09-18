@@ -41,6 +41,8 @@ tests.
 
 ## Docker
 How to run the project in a container:
-1. Create the package ```mvn install```
-2. Build the container: ```docker build -f Dockerfile -t cnsd-bank .```
-3. Start the container: ```docker run -p 8080:8080 -t cnsd-bank```
+1. Create the package:`mvn install`
+2. Build the container:`docker build -f Dockerfile -t cnsd-bank .`
+3. Start the container: 
+   1. Run the stand-alone container with dev profile: `docker run -p 8080:8080 -t cnsd-bank`
+   2. Or run the entire prod infrastructure: `docker-compose up -d`

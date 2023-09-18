@@ -16,6 +16,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: PG-Admin
+    depends_on:
+      - postgres
     ports:
       - "5433:80"
     environment:
@@ -26,6 +28,17 @@ services:
       PGADMIN_SERVER_JSON_FILE: /pgadmin/servers.json
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+
+  application:
+    image: "cnsd-bank"
+    container_name: CNSD-Bank-Application
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cnsd-bank
 
 volumes:
   postgres-data:
