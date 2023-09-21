@@ -22,4 +22,4 @@ jobs:
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots package --file ./module-1/opdracht_2_4/pom.xml
     - name: Build the Docker image
-      run: docker build . --file ./module-1/opdracht_2_4/Dockerfile --tag cnsd-bank:$(date +%s)
+      run: docker build --file ./module-1/opdracht_2_4/Dockerfile --tag cnsd-bank:$(date +%s) ./module-1/opdracht_2_4
