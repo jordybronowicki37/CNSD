@@ -42,10 +42,12 @@ jobs:
       run: docker build . --file Dockerfile --tag cnsd-bank:$GITHUB_RUN_NUMBER
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
-    - name: Tag the build version
+    - name: Checkout
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.ACTIONS_SECRET }}
+
+    - name: Tag the build version
       run: |
         git tag "Build-v$GITHUB_RUN_NUMBER"
         git push origin "Build-v$GITHUB_RUN_NUMBER" --set-upstream
