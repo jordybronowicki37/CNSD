@@ -1,7 +1,7 @@
 name: Publish Docker image with Maven
 
 env:
-  ASSIGNMENT_PATH: ${{ env.RELEASE_PATH }}
+  ASSIGNMENT_PATH: ${{ vars.RELEASE_PATH }}
 
 on:
   workflow_dispatch:
