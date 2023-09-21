@@ -1,9 +1,9 @@
 name: Publish Docker image with Maven
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
