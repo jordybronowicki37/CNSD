@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cnsd-bank-pitest-report
-        path: ${{ env.ASSIGNMENT_PATH }}/pit-reports
+        path: ${{ env.ASSIGNMENT_PATH }}/target/pit-reports
 
     - name: Sonarcube analysis
       run: |
