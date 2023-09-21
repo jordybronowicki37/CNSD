@@ -19,9 +19,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Vars
-      run: echo "${{ env.ASSIGNMENT_PATH }}"
-
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -38,7 +35,7 @@ jobs:
         mvn sonar:sonar \
         -Dsonar.projectKey=jordybronowicki37-CNSD \
         -Dsonar.host.url=https://sonar.cloud-native-minor.it \
-        -Dsonar.login=5f63c681c581761643e41cbeccf2429faddb7fc4
+        -Dsonar.login=${{ secrets.SONARCUBE_SECRET }}
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
     - name: Build the Docker image
