@@ -12,7 +12,7 @@
 
 ### Local production environment
 1. Run `docker-compose up -d` to create a Postgres container with pg-admin.
-2. Add `prod` profile to spring.
+2. Add `dev` profile to spring.
 3. Start the application.
 4. Go to http://localhost:8080/swagger-ui/index.html for the swagger page.
 5. Go to http://localhost:5433/browser/ for the pg-admin page.
@@ -43,5 +43,5 @@ tests.
 How to run the project in a container:
 1. Build the container:`docker build -f Dockerfile -t cnsd-bank .`
 2. Start the container: 
-   1. Run the stand-alone container with dev profile: `docker run -p 8080:8080 -t cnsd-bank`
-   2. Or run the entire prod infrastructure: `docker-compose up -d`
+   1. Run the stand-alone container with test profile: `docker run -p 8080:8080 -e "SPRING_PROFILES_ACTIVE=test" -t cnsd-bank`
+   2. Or run the entire dev infrastructure: `docker-compose up -d`
