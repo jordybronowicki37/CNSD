@@ -33,6 +33,18 @@ jobs:
       run: mvn -B install --file pom.xml
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
+    - name: Upload Jacoco code report
+      uses: actions/upload-artifact@v2
+      with:
+        name: cnsd-bank-jacoco-report
+        path: ${{ env.ASSIGNMENT_PATH }}/target/site/jacoco
+
+    - name: Upload PITest code report
+      uses: actions/upload-artifact@v2
+      with:
+        name: cnsd-bank-pitest-report
+        path: ${{ env.ASSIGNMENT_PATH }}/pit-reports
+
     - name: Sonarcube analysis
       run: |
         mvn sonar:sonar \
