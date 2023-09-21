@@ -1,7 +1,7 @@
 FROM maven:3-eclipse-temurin-17-alpine AS builder
 WORKDIR /app
 COPY pom.xml .
-COPY src src
+COPY ./src src
 RUN mvn clean install -DskipTests
 RUN java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted
 
