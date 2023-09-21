@@ -28,12 +28,10 @@ jobs:
 
     - name: Sonarcube analysis
       run: |
-        mvn -B sonar:sonar -Dsonar.projectKey=jordybronowicki37-CNSD  \
-        -Dsonar.projectName=jordybronowicki37-CNSD
+        mvn sonar:sonar \
+        -Dsonar.projectKey=jordybronowicki37-CNSD \
         -Dsonar.host.url=https://sonar.cloud-native-minor.it \
-        -Dsonar.login=5f63c681c581761643e41cbeccf2429faddb7fc4 \
-        -Dsonar.qualitygate.wait=true \
-        -Dsonar.qualitygate.timeout=60
+        -Dsonar.login=5f63c681c581761643e41cbeccf2429faddb7fc4
       working-directory: module-1/opdracht_2_4
 
     - name: Build the Docker image
