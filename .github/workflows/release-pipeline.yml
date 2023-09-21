@@ -43,6 +43,7 @@ jobs:
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
     - name: Tag the build version
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.ACTIONS_SECRET }}
       run: |
