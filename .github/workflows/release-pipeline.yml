@@ -28,7 +28,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B install --file pom.xml
-      working-directory: $ASSIGNMENT_PATH
+      working-directory: "$ASSIGNMENT_PATH"
 
     - name: Sonarcube analysis
       run: |
@@ -36,11 +36,11 @@ jobs:
         -Dsonar.projectKey=jordybronowicki37-CNSD \
         -Dsonar.host.url=https://sonar.cloud-native-minor.it \
         -Dsonar.login=5f63c681c581761643e41cbeccf2429faddb7fc4
-      working-directory: $ASSIGNMENT_PATH
+      working-directory: "$ASSIGNMENT_PATH"
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag cnsd-bank:$GITHUB_RUN_NUMBER
-      working-directory: $ASSIGNMENT_PATH
+      working-directory: "$ASSIGNMENT_PATH"
 
     - name: Tag the build version
       run: |
