@@ -44,7 +44,7 @@ jobs:
 
     - name: Tag the build version
       env:
-        GH_TOKEN: ${{ secrets.ACTIONS_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_SECRET }}
       run: |
         git tag "Build-v$GITHUB_RUN_NUMBER"
         git push origin "Build-v$GITHUB_RUN_NUMBER" --set-upstream
