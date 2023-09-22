@@ -17,12 +17,12 @@ public class DummyApiController {
     private final DummyApiService service;
 
     @GetMapping("")
-    ResponseEntity<DummyEmployeesResponse> getAll() {
+    public ResponseEntity<DummyEmployeesResponse> getAll() {
         return ResponseEntity.ok(service.getAllEmployees());
     }
 
     @GetMapping("{id}")
-    ResponseEntity<DummyEmployeeResponse> get(@PathVariable int id) {
+    public ResponseEntity<DummyEmployeeResponse> get(@PathVariable int id) {
         return ResponseEntity.ok(service.getEmployee(id));
     }
 }

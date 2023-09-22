@@ -26,7 +26,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "200", description = "Rekeningen gevonden"),
     })
     @GetMapping("")
-    ResponseEntity<List<RekeningResponse>> getAll() {
+    public ResponseEntity<List<RekeningResponse>> getAll() {
         return new ResponseEntity<>(
                 service.getAll().stream().map(RekeningResponse::new).toList(),
                 HttpStatus.OK
@@ -38,7 +38,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @GetMapping("{rekeningId}")
-    ResponseEntity<RekeningResponse> get(@PathVariable long rekeningId) {
+    public ResponseEntity<RekeningResponse> get(@PathVariable long rekeningId) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.get(rekeningId)),
                 HttpStatus.OK
@@ -51,7 +51,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("")
-    ResponseEntity<RekeningResponse> create(@RequestBody RekeningCreateRequest body) {
+    public ResponseEntity<RekeningResponse> create(@RequestBody RekeningCreateRequest body) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.create(body.persoonId())),
                 HttpStatus.CREATED
@@ -64,7 +64,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PutMapping("{rekeningId}")
-    ResponseEntity<RekeningResponse> edit(@PathVariable long rekeningId, @RequestBody RekeningEditRequest body) {
+    public ResponseEntity<RekeningResponse> edit(@PathVariable long rekeningId, @RequestBody RekeningEditRequest body) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.edit(rekeningId, body)),
                 HttpStatus.OK
@@ -77,7 +77,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{rekeningId}")
-    ResponseEntity<Void> remove(@PathVariable long rekeningId) {
+    public ResponseEntity<Void> remove(@PathVariable long rekeningId) {
         service.remove(rekeningId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -88,7 +88,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{rekeningId}/saldo")
-    ResponseEntity<RekeningResponse> addSaldo(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
+    public ResponseEntity<RekeningResponse> addSaldo(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.addSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
@@ -101,7 +101,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{rekeningId}/saldo")
-    ResponseEntity<RekeningResponse> removeSaldo(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
+    public ResponseEntity<RekeningResponse> removeSaldo(@PathVariable long rekeningId, @Valid @RequestBody SaldoChangeRequest body) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.removeSaldo(rekeningId, body.saldo())),
                 HttpStatus.OK
@@ -114,7 +114,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @PostMapping("{rekeningId}/persoon/{persoonId}")
-    ResponseEntity<RekeningResponse> addPersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
+    public ResponseEntity<RekeningResponse> addPersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.addPersoon(rekeningId, persoonId)),
                 HttpStatus.OK
@@ -127,7 +127,7 @@ public class RekeningController {
             @ApiResponse(responseCode = "404", description = "Rekening is niet gevonden", content = @Content),
     })
     @DeleteMapping("{rekeningId}/persoon/{persoonId}")
-    ResponseEntity<RekeningResponse> removePersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
+    public ResponseEntity<RekeningResponse> removePersoon(@PathVariable long rekeningId, @PathVariable long persoonId) {
         return new ResponseEntity<>(
                 new RekeningResponse(service.removePersoon(rekeningId, persoonId)),
                 HttpStatus.OK

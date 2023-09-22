@@ -83,9 +83,10 @@ class PersoonServiceTest {
     void createExistingIban() {
         // Arrange
         Mockito.when(persoonRepository.existsByBsn(anyString())).thenReturn(true);
+        var request = new PersoonCreateRequest("123456789", "Test");
 
         // Act & Assert
-        assertThrows(AlreadyExistsException.class, () -> persoonService.create(new PersoonCreateRequest("123456789", "Test")));
+        assertThrows(AlreadyExistsException.class, () -> persoonService.create(request));
     }
 
     @Test
@@ -103,8 +104,11 @@ class PersoonServiceTest {
 
     @Test
     void editNotFound() {
+        // Arrange
+        var request = new PersoonEditRequest("Test");
+
         // Act & Assert
-        assertThrows(NotFoundException.class, () -> persoonService.edit(3L, new PersoonEditRequest("Test")));
+        assertThrows(NotFoundException.class, () -> persoonService.edit(3L, request));
     }
 
     @Test

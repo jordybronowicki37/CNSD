@@ -10,15 +10,15 @@ import java.util.Random;
 @EqualsAndHashCode
 public class Iban {
     @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
-    private String iban;
+    private String value;
 
-    public Iban(String iban) {
-        this.iban = iban;
+    public Iban(String value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return iban;
+        return value;
     }
 
     public static Iban random() {
@@ -27,7 +27,7 @@ public class Iban {
 
     public static Iban random(Random random) {
         var builder = new StringBuilder("NL99CNSD");
-        for (int i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
             builder.append(random.nextInt(10));
         }
         return new Iban(builder.toString());

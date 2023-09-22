@@ -25,7 +25,7 @@ public class PersoonController {
             @ApiResponse(responseCode = "200", description = "Personen gevonden"),
     })
     @GetMapping("")
-    ResponseEntity<List<PersoonResponse>> getAll() {
+    public ResponseEntity<List<PersoonResponse>> getAll() {
         return new ResponseEntity<>(
                 service.getAll().stream().map(PersoonResponse::new).toList(),
                 HttpStatus.OK
@@ -37,7 +37,7 @@ public class PersoonController {
             @ApiResponse(responseCode = "404", description = "Persoon is niet gevonden", content = @Content),
     })
     @GetMapping("{persoonId}")
-    ResponseEntity<PersoonResponse> get(@PathVariable long persoonId) {
+    public ResponseEntity<PersoonResponse> get(@PathVariable long persoonId) {
         return new ResponseEntity<>(
                 new PersoonResponse(service.get(persoonId)),
                 HttpStatus.OK
@@ -50,7 +50,7 @@ public class PersoonController {
             @ApiResponse(responseCode = "409", description = "Er bestaat al een persoon met deze credentials", content = @Content),
     })
     @PostMapping("")
-    ResponseEntity<PersoonResponse> create(@Valid @RequestBody PersoonCreateRequest body) {
+    public ResponseEntity<PersoonResponse> create(@Valid @RequestBody PersoonCreateRequest body) {
         return new ResponseEntity<>(
                 new PersoonResponse(service.create(body)),
                 HttpStatus.CREATED
@@ -62,7 +62,7 @@ public class PersoonController {
             @ApiResponse(responseCode = "400", description = "Invalide argumenten meegegeven", content = @Content),
     })
     @PutMapping("{persoonId}")
-    ResponseEntity<PersoonResponse> edit(@PathVariable long persoonId, @RequestBody PersoonEditRequest body) {
+    public ResponseEntity<PersoonResponse> edit(@PathVariable long persoonId, @RequestBody PersoonEditRequest body) {
         return new ResponseEntity<>(
                 new PersoonResponse(service.edit(persoonId, body)),
                 HttpStatus.OK
@@ -74,7 +74,7 @@ public class PersoonController {
             @ApiResponse(responseCode = "404", description = "Persoon is niet gevonden", content = @Content),
     })
     @DeleteMapping("{persoonId}")
-    ResponseEntity<Void> remove(@PathVariable long persoonId) {
+    public ResponseEntity<Void> remove(@PathVariable long persoonId) {
         service.remove(persoonId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

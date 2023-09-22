@@ -115,8 +115,11 @@ class RekeningServiceTest {
 
     @Test
     void editNotFound() {
+        // Arrange
+        var request = new RekeningEditRequest(RekeningStatus.GEBLOKKEERD);
+
         // Act & Assert
-        assertThrows(NotFoundException.class, () -> rekeningService.edit(3, new RekeningEditRequest(RekeningStatus.GEBLOKKEERD)));
+        assertThrows(NotFoundException.class, () -> rekeningService.edit(3, request));
     }
 
     @Test
