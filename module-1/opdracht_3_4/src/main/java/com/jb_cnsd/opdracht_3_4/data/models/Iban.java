@@ -9,7 +9,7 @@ import java.util.Random;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Iban {
-    @Column(unique = true, length = 18, columnDefinition = "CHAR(18)")
+    @Column(unique = true, length = 18, columnDefinition = "CHAR(18)", name = "iban")
     private String value;
 
     public Iban(String value) {
