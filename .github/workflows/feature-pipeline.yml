@@ -1,16 +1,14 @@
-name: Release pipeline
+name: Feature pipeline
 
 env:
   ASSIGNMENT_PATH: ${{ vars.RELEASE_PATH }}
 
 on:
-  workflow_dispatch:
-    branches: [ "main" ]
   push:
-    branches: [ "main" ]
+    branches: [ "feature**" ]
     paths:
       - 'module-1/**'
-      - '.github/workflows/release-pipeline.yml'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -50,14 +48,10 @@ jobs:
         mvn sonar:sonar \
         -Dsonar.projectKey=jordybronowicki37-CNSD \
         -Dsonar.host.url=https://sonar.cloud-native-minor.it \
-        -Dsonar.login=${{ secrets.SONARCUBE_SECRET }}
+        -Dsonar.login=${{ secrets.SONARCUBE_SECRET }} \
+        -Dsonar.branch.name=$CI_BRANCH_NAME
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag cnsd-bank:$GITHUB_RUN_NUMBER
       working-directory: ${{ env.ASSIGNMENT_PATH }}
-
-    - name: Tag the build version
-      run: |
-        git tag "Build-v$GITHUB_RUN_NUMBER"
-        git push origin "Build-v$GITHUB_RUN_NUMBER" --set-upstream
