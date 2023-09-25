@@ -9,7 +9,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - '$ASSIGNMENT_PATH/**'
+      - '${{ env.ASSIGNMENT_PATH }}/**'
       - '.github/workflows/release-pipeline.yml'
 
 jobs:
