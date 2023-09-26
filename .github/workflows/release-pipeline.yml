@@ -91,7 +91,7 @@ jobs:
         ECR_REPOSITORY: ${{ env.DOCKER_SERVICE_NAME }}
         IMAGE_TAG: v${{ github.run_number }}
       run: |
-        echo "${PRIVATE_KEY}" > private_key && chmod 600 private_key
+        echo "${PRIVATE_KEY}" > private_key && chmod 400 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} "
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}/${ECR_REPOSITORY}
           docker rm -f ${ECR_REPOSITORY}
