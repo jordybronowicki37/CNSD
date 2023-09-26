@@ -31,28 +31,28 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B clean install -DskipTests --file pom.xml
+      run: mvn -B clean install --file pom.xml
       working-directory: ${{ env.ASSIGNMENT_PATH }}
 
-#    - name: Upload Jacoco code report
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: cnsd-bank-jacoco-report
-#        path: ${{ env.ASSIGNMENT_PATH }}/target/site/jacoco
-#
-#    - name: Upload PITest code report
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: cnsd-bank-pitest-report
-#        path: ${{ env.ASSIGNMENT_PATH }}/target/pit-reports
-#
-#    - name: Sonarcube analysis
-#      run: |
-#        mvn sonar:sonar \
-#        -Dsonar.projectKey=jordybronowicki37-CNSD \
-#        -Dsonar.host.url=https://sonar.cloud-native-minor.it \
-#        -Dsonar.login=${{ secrets.SONARCUBE_SECRET }}
-#      working-directory: ${{ env.ASSIGNMENT_PATH }}
+    - name: Upload Jacoco code report
+      uses: actions/upload-artifact@v2
+      with:
+        name: cnsd-bank-jacoco-report
+        path: ${{ env.ASSIGNMENT_PATH }}/target/site/jacoco
+
+    - name: Upload PITest code report
+      uses: actions/upload-artifact@v2
+      with:
+        name: cnsd-bank-pitest-report
+        path: ${{ env.ASSIGNMENT_PATH }}/target/pit-reports
+
+    - name: Sonarcube analysis
+      run: |
+        mvn sonar:sonar \
+        -Dsonar.projectKey=jordybronowicki37-CNSD \
+        -Dsonar.host.url=https://sonar.cloud-native-minor.it \
+        -Dsonar.login=${{ secrets.SONARCUBE_SECRET }}
+      working-directory: ${{ env.ASSIGNMENT_PATH }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
