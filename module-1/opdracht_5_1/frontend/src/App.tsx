@@ -1,14 +1,14 @@
 import './App.css'
 import {Header} from "./components/Header.tsx";
+import {Redirect, Route} from "react-router-dom";
+import {LoginPage} from "./pages/LoginPage.tsx";
 
-function App() {
-
+export function App() {
   return (
-    <div>
+    <>
         <Header/>
-
-    </div>
+        <Route exact path="/"><Redirect to="/login"/></Route>
+        <Route path="/login" component={LoginPage}/>
+    </>
   )
 }
-
-export default App
