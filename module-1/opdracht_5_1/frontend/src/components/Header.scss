@@ -22,5 +22,9 @@ header {
         color: #000;
       }
     }
+
+    a.current-location {
+      color: var(--primary-color-darker);
+    }
   }
 }

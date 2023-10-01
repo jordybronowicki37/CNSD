@@ -2,11 +2,19 @@ import "./Header.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {StoreTypes} from "../data/DataStore.ts";
 import {userLogoutAction} from "../data/reducers/UserReducer.ts";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 export function Header() {
   const user = useSelector<StoreTypes, StoreTypes["user"]>(s => s.user);
   const dispatch = useDispatch();
+  const {pathname} = useLocation();
+
+  const generateLinkParams = (to: string) => {
+    return {
+      to,
+      className: `${pathname === to ? "current-location" : ""}`
+    }
+  }
 
   return (
     <header>
@@ -14,11 +22,12 @@ export function Header() {
 
       {user === null ?
         <nav>
-          <Link to="/login">Login</Link>
+          <Link {...generateLinkParams("/signup")}>Signup</Link>
+          <Link {...generateLinkParams("/login")}>Login</Link>
         </nav> :
         <nav>
-          <Link to="/overview">Overview</Link>
-          <Link to="/login" onClick={() => dispatch(userLogoutAction())}>Logout</Link>
+          <Link {...generateLinkParams("/overview")}>Overview</Link>
+          <Link {...generateLinkParams("/login")} onClick={() => dispatch(userLogoutAction())}>Logout</Link>
         </nav>
       }
     </header>
