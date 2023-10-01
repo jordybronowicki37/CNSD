@@ -1,24 +1,12 @@
 import "./OverviewPage.scss";
-import {Account, AccountStatus} from "../data/Types.ts";
 import {AccountItem} from "../components/AccountItem.tsx";
+import {useSelector} from "react-redux";
+import {StoreTypes} from "../data/DataStore.ts";
+import {Holder} from "../data/Types.ts";
 
 export function OverviewPage() {
-  const accounts: Account[] = [
-    {
-      id: 1,
-      iban: "NL99CNSD1234567890",
-      saldo: 546.95,
-      status: AccountStatus.NORMAL,
-      personen: [1]
-    },
-    {
-      id: 2,
-      iban: "NL99CNSD0987654321",
-      saldo: -96.42,
-      status: AccountStatus.BLOCKED,
-      personen: [2, 1]
-    }
-  ]
+  const accounts = useSelector<StoreTypes, StoreTypes["accounts"]>(s => s.accounts);
+  const holders = useSelector<StoreTypes, StoreTypes["holders"]>(s => s.holders);
 
   return (
     <div className="overview-page">
@@ -31,9 +19,13 @@ export function OverviewPage() {
           </div>
         </div>
         <div className="accounts-container">
-          {accounts.map(v => <AccountItem key={v.id} account={v} title="JR Test"/>)}
+          {accounts.map(v => <AccountItem key={v.id} account={v} title={findHolderById(v.personen[0], holders).naam}/>)}
         </div>
       </div>
     </div>
   );
+}
+
+function findHolderById(id: number, list: Holder[]): Holder {
+  return list.find(v => v.id === id)!;
 }
