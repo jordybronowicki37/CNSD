@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header>
-      <h1>CNSD Account</h1>
+      <h1>CNSD Banking Service</h1>
 
       {user === null ?
         <nav>
