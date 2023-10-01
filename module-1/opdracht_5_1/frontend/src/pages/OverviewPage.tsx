@@ -3,10 +3,14 @@ import {AccountItem} from "../components/AccountItem.tsx";
 import {useSelector} from "react-redux";
 import {StoreTypes} from "../data/DataStore.ts";
 import {Holder} from "../data/Types.ts";
+import {useHistory} from "react-router-dom";
 
 export function OverviewPage() {
   const accounts = useSelector<StoreTypes, StoreTypes["accounts"]>(s => s.accounts);
   const holders = useSelector<StoreTypes, StoreTypes["holders"]>(s => s.holders);
+  const user = useSelector<StoreTypes, StoreTypes["user"]>(s => s.user);
+  const history = useHistory();
+  if (user === null) history.push("/login");
 
   return (
     <div className="overview-page">
