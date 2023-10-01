@@ -17,3 +17,7 @@ export type Holder = {
   naam: string;
   rekeningen: number[];
 }
+
+export type User = {
+  username: string;
+}
