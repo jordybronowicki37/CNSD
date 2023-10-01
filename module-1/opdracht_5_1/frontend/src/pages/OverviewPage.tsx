@@ -31,7 +31,7 @@ export function OverviewPage() {
           </div>
         </div>
         <div className="accounts-container">
-          {accounts.map(v => <AccountItem key={v.id} account={v}/>)}
+          {accounts.map(v => <AccountItem key={v.id} account={v} title="JR Test"/>)}
         </div>
       </div>
     </div>

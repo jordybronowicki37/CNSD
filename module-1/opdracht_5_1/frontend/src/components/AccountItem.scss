@@ -28,6 +28,11 @@
     gap: 1rem;
   }
 
+  .account-saldo.negative {
+    font-weight: 600;
+    color: red;
+  }
+
   .account-blocked {
     background-color: #FF0000CC;
     color: #fffe;
