@@ -1,0 +1,39 @@
+.account-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  >div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .account-name {
+    font-weight: bold;
+  }
+
+  .account-iban {
+    color: #000a;
+    font-weight: lighter;
+  }
+
+  .account-title {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .account-blocked {
+    background-color: #FF0000CC;
+    color: #fffe;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 1rem;
+    padding: 0.1rem 0.3rem;
+  }
+}

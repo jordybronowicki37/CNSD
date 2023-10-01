@@ -1,0 +1,59 @@
+.overview-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5rem;
+
+  .overview-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 2rem;
+    width: max-content;
+    max-width: 40rem;
+    overflow: hidden;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .accounts-container {
+    width: 100%;
+
+    .account-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid #cccc;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    h2 {
+      margin: 0;
+    }
+
+    .overview-total-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      p {
+        margin: 0;
+      }
+
+      .total-saldo {
+        color: #000a;
+        font-weight: lighter;
+      }
+    }
+  }
+}
