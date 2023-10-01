@@ -27,7 +27,10 @@ export function Header() {
         </nav> :
         <nav>
           <Link {...generateLinkParams("/overview")}>Overview</Link>
-          <Link {...generateLinkParams("/login")} onClick={() => dispatch(userLogoutAction())}>Logout</Link>
+          <div className="current-user">
+            <p>{user.username}</p>
+            <Link {...generateLinkParams("/login")} onClick={() => dispatch(userLogoutAction())}>Logout</Link>
+          </div>
         </nav>
       }
     </header>

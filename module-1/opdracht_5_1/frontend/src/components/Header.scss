@@ -10,6 +10,7 @@ header {
 
   nav {
     display: flex;
+    align-items: center;
     gap: 1rem;
     margin: 1rem;
 
@@ -25,6 +26,24 @@ header {
 
     a.current-location {
       color: var(--primary-color-darker);
+    }
+
+    .current-user {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      border-left: 1px solid #000a;
+      padding-left: 1rem;
+
+      p {
+        margin: 0;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      a {
+        font-size: 10px;
+      }
     }
   }
 }
