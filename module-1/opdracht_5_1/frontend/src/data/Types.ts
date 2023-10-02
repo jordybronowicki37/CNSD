@@ -15,11 +15,6 @@ export type Holder = {
   id: number;
   bsn: string;
   naam: string;
-  rekeningen: number[];
 }
 
-export type User = {
-  id: number;
-  bsn: string;
-  naam: string;
-}
+export type User = Holder;
