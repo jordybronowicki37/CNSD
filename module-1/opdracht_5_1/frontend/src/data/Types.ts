@@ -19,5 +19,7 @@ export type Holder = {
 }
 
 export type User = {
-  username: string;
+  id: number;
+  bsn: string;
+  naam: string;
 }

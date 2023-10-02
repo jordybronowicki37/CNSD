@@ -24,7 +24,9 @@ export function LoginPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(userLoginAction({
-      username: formData.username
+      id: 1,
+      naam: formData.username,
+      bsn: ""
     }));
     history.push("/overview");
   }
