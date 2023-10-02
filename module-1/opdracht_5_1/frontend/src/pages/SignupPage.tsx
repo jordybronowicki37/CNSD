@@ -1,15 +1,11 @@
 import "./SignupPage.scss";
-import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
-import {userLoginAction} from "../data/reducers/UserReducer.ts";
-import {StoreTypes} from "../data/DataStore.ts";
+import {useCheckForUserAlreadyLoggedIn} from "../hooks/CheckLoginHook.ts";
 
 export function SignupPage() {
-  const dispatch = useDispatch();
+  useCheckForUserAlreadyLoggedIn();
   const history = useHistory();
-  const user = useSelector<StoreTypes, StoreTypes["user"]>(s => s.user);
-  if (user !== null) history.push("/overview");
 
   const [formData, setFormData] = useState({
     username: "",
@@ -25,9 +21,6 @@ export function SignupPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(userLoginAction({
-      username: formData.username
-    }));
     history.push("/overview");
   }
 

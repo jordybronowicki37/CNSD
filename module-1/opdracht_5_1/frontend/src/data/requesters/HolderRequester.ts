@@ -16,7 +16,7 @@ const holders: Holder[] = [
   }
 ]
 
-export async function GetHolders() {
+export async function getHolders() {
   const user = Store.getState().user;
   if (user === null) return;
 

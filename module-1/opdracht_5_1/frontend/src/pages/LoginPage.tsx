@@ -1,16 +1,14 @@
 import "./LoginPage.scss";
-import {useDispatch, useSelector} from "react-redux";
-import {userLoginAction} from "../data/reducers/UserReducer.ts";
 import {ChangeEvent, FormEvent, useState} from "react";
 import {useHistory} from "react-router-dom";
-import {StoreTypes} from "../data/DataStore.ts";
+import {loginUser} from "../data/requesters/UserRequester.ts";
+import {useCheckForUserAlreadyLoggedIn} from "../hooks/CheckLoginHook.ts";
 
 export function LoginPage() {
-  const dispatch = useDispatch();
+  useCheckForUserAlreadyLoggedIn();
   const history = useHistory();
-  const user = useSelector<StoreTypes, StoreTypes["user"]>(s => s.user);
-  if (user !== null) history.push("/overview");
-
+  const [loading, setLoading] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -23,12 +21,13 @@ export function LoginPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(userLoginAction({
-      id: 1,
-      naam: formData.username,
-      bsn: ""
-    }));
-    history.push("/overview");
+    setLoading(true)
+    loginUser(formData.username, formData.password)
+        .then(_ => history.push("/overview"))
+        .catch(_ => {
+          setLoading(false);
+          setLoginFailed(true);
+        });
   }
 
   return (
@@ -36,15 +35,27 @@ export function LoginPage() {
       <div className="login-card">
         <h2>Login</h2>
         <p>Login to continue</p>
-
+        <p hidden={!loginFailed} className="login-failed-message">Username or password incorrect!</p>
         <form onSubmit={handleSubmit}>
           <div className="input-container">
             <label htmlFor="username">Username</label>
-            <input type="text" id="username" name="username" value={formData.username} onChange={handleInputChange}/>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                disabled={loading}/>
           </div>
           <div className="input-container">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange}/>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                disabled={loading}/>
           </div>
           <button type="submit">Login</button>
         </form>

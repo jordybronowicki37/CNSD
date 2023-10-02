@@ -17,6 +17,10 @@
     padding: 2rem;
     gap: 1rem;
 
+    .login-failed-message {
+      color: red;
+    }
+
     h2, p {
       margin: 0;
     }
@@ -47,6 +51,10 @@
 
           &:focus {
             outline: none;
+          }
+
+          &:disabled {
+            background-color: transparent;
           }
         }
       }

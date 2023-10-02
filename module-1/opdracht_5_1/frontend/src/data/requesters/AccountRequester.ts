@@ -20,7 +20,7 @@ const accounts: Account[] = [
   }
 ]
 
-export async function GetAccounts() {
+export async function getAccounts() {
   const user = Store.getState().user;
   if (user === null) return;
 
