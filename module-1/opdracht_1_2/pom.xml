@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jb_cnsd</groupId>
-    <artifactId>opdracht_1_2</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>opdracht_1_2</name>
-    <description>opdracht_1_2</description>
+    <artifactId>bank</artifactId>
+    <version>0.1.2</version>
+    <name>CNSD-bank</name>
+    <description>CNSD-bank</description>
     <properties>
         <java.version>17</java.version>
     </properties>

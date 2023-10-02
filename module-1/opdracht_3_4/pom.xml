@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jb_cnsd</groupId>
-    <artifactId>opdracht_3_4</artifactId>
+    <artifactId>bank</artifactId>
     <version>0.3.4</version>
-    <name>opdracht_3_4</name>
+    <name>CNSD-bank</name>
     <description>CNSD-bank code base</description>
     <packaging>jar</packaging>
     <properties>
