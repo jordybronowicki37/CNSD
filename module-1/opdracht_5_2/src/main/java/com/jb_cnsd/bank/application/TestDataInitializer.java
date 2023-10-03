@@ -12,7 +12,7 @@ import java.beans.Transient;
 import java.util.List;
 
 @Component
-@Profile("dev")
+@Profile("dummy-data")
 public class TestDataInitializer {
     private final RekeningRepository rekeningRepository;
 
