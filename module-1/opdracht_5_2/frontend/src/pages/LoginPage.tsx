@@ -21,7 +21,7 @@ export function LoginPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true)
+    setLoading(true);
     loginUser(formData.username, formData.password)
         .then(_ => history.push("/overview"))
         .catch(_ => {
@@ -57,7 +57,7 @@ export function LoginPage() {
                 onChange={handleInputChange}
                 disabled={loading}/>
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>Login</button>
         </form>
       </div>
     </div>
