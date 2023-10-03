@@ -1,5 +1,6 @@
 package com.jb_cnsd.bank.web.controller;
 
+import com.jb_cnsd.bank.data.models.Rekening;
 import com.jb_cnsd.bank.domain.service.RekeningService;
 import com.jb_cnsd.bank.web.dto.requests.RekeningCreateRequest;
 import com.jb_cnsd.bank.web.dto.requests.RekeningEditRequest;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/rekening")
@@ -26,9 +28,17 @@ public class RekeningController {
             @ApiResponse(responseCode = "200", description = "Rekeningen gevonden"),
     })
     @GetMapping("")
-    public ResponseEntity<List<RekeningResponse>> getAll() {
+    public ResponseEntity<List<RekeningResponse>> getAll(@RequestParam Optional<Long> persoonId) {
+        List<Rekening> rekeningen;
+
+        if (persoonId.isPresent()) {
+            rekeningen = service.getAllByUserId(persoonId.get());
+        } else {
+            rekeningen = service.getAll();
+        }
+
         return new ResponseEntity<>(
-                service.getAll().stream().map(RekeningResponse::new).toList(),
+                rekeningen.stream().map(RekeningResponse::new).toList(),
                 HttpStatus.OK
         );
     }

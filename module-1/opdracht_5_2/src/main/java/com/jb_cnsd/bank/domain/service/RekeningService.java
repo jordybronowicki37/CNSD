@@ -27,6 +27,12 @@ public class RekeningService {
         return rekeningRepository.findAll();
     }
 
+    @Cacheable(value = "rekeningen")
+    public List<Rekening> getAllByUserId(long persoonId) {
+        var persoon = findPersoon(persoonId);
+        return persoon.getRekeningen().stream().toList();
+    }
+
     @Cacheable(value = "rekeningen", key = "#id")
     public Rekening get(long id) {
         return findRekening(id);
