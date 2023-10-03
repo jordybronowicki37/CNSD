@@ -57,7 +57,7 @@ class PersoonControllerIT {
     @Test
     void getAll() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/persoon", port));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon", port));
 
         // Act
         var response = restTemplate.getForEntity(uri, PersoonResponse[].class);
@@ -75,7 +75,7 @@ class PersoonControllerIT {
     void get() throws URISyntaxException {
         // Arrange
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/persoon/%d", port, p1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/%d", port, p1.getId()));
 
         // Act
         var response = restTemplate.getForEntity(uri, PersoonResponse.class);
@@ -90,7 +90,7 @@ class PersoonControllerIT {
     @Test
     void getNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/persoon/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/0", port));
 
         // Act
         var response = restTemplate.getForEntity(uri, String.class);
@@ -102,7 +102,7 @@ class PersoonControllerIT {
     @Test
     void create() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/persoon", port));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon", port));
         var requestBody = new PersoonCreateRequest("112233445", "Test");
 
         // Act
@@ -122,7 +122,7 @@ class PersoonControllerIT {
     void edit() throws URISyntaxException {
         // Arrange
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/persoon/%d", port, p1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/%d", port, p1.getId()));
         var requestBody = new PersoonEditRequest("Test");
 
         // Act
@@ -141,7 +141,7 @@ class PersoonControllerIT {
     @Test
     void editNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/persoon/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/0", port));
         var requestBody = new PersoonEditRequest("Test");
 
         // Act
@@ -155,7 +155,7 @@ class PersoonControllerIT {
     void remove() throws URISyntaxException {
         // Arrange
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/persoon/%d", port, p1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/%d", port, p1.getId()));
 
         // Act
         var response = restTemplate.exchange(uri, HttpMethod.DELETE, RequestEntity.EMPTY, Void.class);
@@ -167,7 +167,7 @@ class PersoonControllerIT {
     @Test
     void removeNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/persoon/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/persoon/0", port));
 
         // Act
         var response = restTemplate.exchange(uri, HttpMethod.DELETE, RequestEntity.EMPTY, String.class);

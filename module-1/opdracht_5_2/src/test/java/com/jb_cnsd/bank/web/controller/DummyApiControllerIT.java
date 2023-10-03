@@ -73,7 +73,7 @@ class DummyApiControllerIT {
                 );
 
         // Act
-        var uri = new URI(String.format("http://localhost:%d/dummy-api", port));
+        var uri = new URI(String.format("http://localhost:%d/api/dummy-api", port));
         var response = restTemplate.exchange(uri, HttpMethod.GET, RequestEntity.EMPTY, DummyEmployeesResponse.class);
 
         // Assert
@@ -114,7 +114,7 @@ class DummyApiControllerIT {
                 );
 
         // Act
-        var uri = new URI(String.format("http://localhost:%d/dummy-api/1", port));
+        var uri = new URI(String.format("http://localhost:%d/api/dummy-api/1", port));
         var response = restTemplate.exchange(uri, HttpMethod.GET, RequestEntity.EMPTY, DummyEmployeeResponse.class);
 
         // Assert

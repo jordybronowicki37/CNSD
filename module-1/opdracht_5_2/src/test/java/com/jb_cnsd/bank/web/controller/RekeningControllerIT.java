@@ -63,7 +63,7 @@ class RekeningControllerIT {
     @Test
     void getAll() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/rekening", port));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening", port));
 
         // Act
         var response = restTemplate.getForEntity(uri, RekeningResponse[].class);
@@ -80,7 +80,7 @@ class RekeningControllerIT {
     void get() throws URISyntaxException {
         // Arrange
         var r1 = rekeningRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d", port, r1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d", port, r1.getId()));
 
         // Act
         var response = restTemplate.getForEntity(uri, RekeningResponse.class);
@@ -95,7 +95,7 @@ class RekeningControllerIT {
     @Test
     void getNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/rekening/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/0", port));
 
         // Act
         var response = restTemplate.exchange(uri, HttpMethod.GET, RequestEntity.EMPTY, String.class);
@@ -108,7 +108,7 @@ class RekeningControllerIT {
     void create() throws URISyntaxException {
         // Arrange
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening", port));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening", port));
         var requestBody = new RekeningCreateRequest(p1.getId());
 
         // Act
@@ -133,7 +133,7 @@ class RekeningControllerIT {
         // Arrange
         var p1 = persoonRepository.findAll().get(0);
         var r1 = rekeningRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d", port, r1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d", port, r1.getId()));
         var requestBody = new RekeningEditRequest(RekeningStatus.GEBLOKKEERD);
 
         // Act
@@ -156,7 +156,7 @@ class RekeningControllerIT {
     @Test
     void editNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/rekening/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/0", port));
         var requestBody = new RekeningEditRequest(RekeningStatus.GEBLOKKEERD);
 
         // Act
@@ -170,7 +170,7 @@ class RekeningControllerIT {
     void remove() throws URISyntaxException {
         // Arrange
         var r1 = rekeningRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d", port, r1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d", port, r1.getId()));
 
         // Act
         var response = restTemplate.exchange(uri, HttpMethod.DELETE, RequestEntity.EMPTY, Void.class);
@@ -182,7 +182,7 @@ class RekeningControllerIT {
     @Test
     void removeNotFound() throws URISyntaxException {
         // Arrange
-        var uri = new URI(String.format("http://localhost:%d/rekening/0", port));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/0", port));
 
         // Act
         var response = restTemplate.exchange(uri, HttpMethod.DELETE, RequestEntity.EMPTY, String.class);
@@ -198,7 +198,7 @@ class RekeningControllerIT {
         var p1 = persoonRepository.findAll().get(0);
         var p2 = new Persoon("112233445", "Test");
         persoonRepository.save(p2);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d/persoon/%d", port, r1.getId(), p2.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d/persoon/%d", port, r1.getId(), p2.getId()));
 
         // Act
         var response = restTemplate.exchange(new RequestEntity<>(HttpMethod.POST, uri), RekeningResponse.class);
@@ -228,7 +228,7 @@ class RekeningControllerIT {
         persoonRepository.save(p2);
         r1.getPersonen().add(p2);
         rekeningRepository.save(r1);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d/persoon/%d", port, r1.getId(), p1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d/persoon/%d", port, r1.getId(), p1.getId()));
 
         // Act
         var response = restTemplate.exchange(new RequestEntity<>(HttpMethod.DELETE, uri), RekeningResponse.class);
@@ -254,7 +254,7 @@ class RekeningControllerIT {
         // Arrange
         var r1 = rekeningRepository.findAll().get(0);
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d/saldo", port, r1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d/saldo", port, r1.getId()));
         var requestBody = new SaldoChangeRequest(100);
 
         // Act
@@ -280,7 +280,7 @@ class RekeningControllerIT {
         // Arrange
         var r1 = rekeningRepository.findAll().get(0);
         var p1 = persoonRepository.findAll().get(0);
-        var uri = new URI(String.format("http://localhost:%d/rekening/%d/saldo", port, r1.getId()));
+        var uri = new URI(String.format("http://localhost:%d/api/rekening/%d/saldo", port, r1.getId()));
         var requestBody = new SaldoChangeRequest(50);
 
         // Act

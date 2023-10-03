@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/dummy-api")
+@RequestMapping("api/dummy-api")
 @AllArgsConstructor
 public class DummyApiController {
     private final DummyApiService service;
