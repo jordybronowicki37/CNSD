@@ -85,23 +85,6 @@ jobs:
         git tag "Build-v$GITHUB_RUN_NUMBER"
         git push origin "Build-v$GITHUB_RUN_NUMBER" --set-upstream
 
-    - name: Deploy container on EC2
-      env:
-        PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-        HOSTNAME : ${{ secrets.AWS_EC2_HOST_NAME  }}
-        USER_NAME : ${{ secrets.AWS_USER_NAME  }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ env.DOCKER_SERVICE_NAME }}
-        IMAGE_TAG: v${{ github.run_number }}
-      run: |
-        echo "${PRIVATE_KEY}" > private_key && chmod 400 private_key
-        ls -l private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} "
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}/${ECR_REPOSITORY}
-          docker rm -f ${ECR_REPOSITORY}
-          docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name ${ECR_REPOSITORY} ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} 
-        "
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
