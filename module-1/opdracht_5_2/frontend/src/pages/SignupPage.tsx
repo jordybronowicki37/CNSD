@@ -12,7 +12,7 @@ export function SignupPage() {
 
   const [formData, setFormData] = useState({
     username: "",
-    iban: "",
+    bsn: "",
     password: "",
     password2: "",
   });
@@ -25,7 +25,7 @@ export function SignupPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    signupUser(formData.username, formData.password)
+    signupUser(formData.username, formData.bsn)
       .then(() => history.push("/overview"))
       .catch(() => {
         setLoading(false);
@@ -56,14 +56,14 @@ export function SignupPage() {
           </div>
 
           <div className="input-container">
-            <label htmlFor="iban">Iban</label>
+            <label htmlFor="bsn">Bsn</label>
             <input
               type="text"
-              id="iban"
-              name="iban"
+              id="bsn"
+              name="bsn"
               minLength={9}
               maxLength={9}
-              value={formData.iban}
+              value={formData.bsn}
               disabled={loading}
               onChange={handleInputChange}/>
           </div>
