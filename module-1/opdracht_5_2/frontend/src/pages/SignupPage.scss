@@ -21,6 +21,10 @@
       margin: 0;
     }
 
+    .signup-failed-message {
+      color: red;
+    }
+
     form {
       display: flex;
       flex-direction: column;
