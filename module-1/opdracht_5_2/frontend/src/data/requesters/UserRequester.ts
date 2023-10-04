@@ -1,14 +1,18 @@
 import {userLoginAction} from "../reducers/UserReducer.ts";
 import {Store} from "../DataStore.ts";
 import {User} from "../Types.ts";
+import axios from "axios";
 
 export async function loginUser(username: string, password: string) {
-    const response = await fetch(`/api/login`, {
-        body: JSON.stringify({username, password}),
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-    });
-    if (!response.ok) throw new Error("Login failed");
-    const json = await response.json() as User;
-    Store.dispatch(userLoginAction(json));
+    await axios.post(
+      `/api/login`,
+      {username, password}
+    )
+      .then(response => {
+          const user = response.data as User;
+          Store.dispatch(userLoginAction(user));
+      })
+      .catch(_ => {
+          throw new Error("Login failed");
+      });
 }
