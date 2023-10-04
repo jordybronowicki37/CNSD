@@ -12,7 +12,21 @@ export async function loginUser(username: string, password: string) {
           const user = response.data as User;
           Store.dispatch(userLoginAction(user));
       })
-      .catch(_ => {
+      .catch(() => {
           throw new Error("Login failed");
       });
+}
+
+export async function signupUser(username: string, bsn: string) {
+  await axios.post(
+    `/api/persoon`,
+    {naam: username, bsn}
+  )
+    .then(response => {
+      const user = response.data as User;
+      Store.dispatch(userLoginAction(user));
+    })
+    .catch(() => {
+      throw new Error("Signup failed");
+    });
 }

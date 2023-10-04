@@ -12,7 +12,7 @@ export async function getHolders() {
       const holders = response.data as Holder[];
       Store.dispatch(holdersSetAction(holders));
     })
-    .catch(_ => {
+    .catch(() => {
       throw new Error("Holders fetch failed");
     });
 }

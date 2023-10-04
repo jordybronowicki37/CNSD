@@ -23,8 +23,8 @@ export function LoginPage() {
     event.preventDefault();
     setLoading(true);
     loginUser(formData.username, formData.password)
-        .then(_ => history.push("/overview"))
-        .catch(_ => {
+        .then(() => history.push("/overview"))
+        .catch(() => {
           setLoading(false);
           setLoginFailed(true);
         });

@@ -20,10 +20,10 @@ export function OverviewPage() {
     const holdersPromise = getHolders();
     const accountsPromise = getAccounts();
     Promise.all([holdersPromise, accountsPromise])
-      .then(_ => {
+      .then(() => {
         setLoading(false);
       })
-      .catch(_ => {
+      .catch(() => {
         setLoading(false);
         setError(true);
       });
@@ -31,7 +31,7 @@ export function OverviewPage() {
 
   const onCreateAccount = () => {
     setNewAccountLoading(true);
-    createAccount().then(_ => {
+    createAccount().then(() => {
       setNewAccountLoading(false)
     });
   }

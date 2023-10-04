@@ -8,7 +8,7 @@ export function useCheckForUserNotLoggedIn() {
     const history = useHistory();
     useEffect(() => {
         if (user === null) history.push("/login");
-    }, []);
+    });
 }
 
 export function useCheckForUserAlreadyLoggedIn() {
@@ -16,5 +16,5 @@ export function useCheckForUserAlreadyLoggedIn() {
     const history = useHistory();
     useEffect(() => {
         if (user !== null) history.push("/overview");
-    }, []);
+    });
 }

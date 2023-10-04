@@ -12,7 +12,7 @@ export async function getAccounts() {
       const accounts = response.data as Account[];
       Store.dispatch(accountsSetAction(accounts));
     })
-    .catch(_ => {
+    .catch(() => {
       throw new Error("Accounts fetch failed");
     });
 }
@@ -26,7 +26,7 @@ export async function createAccount() {
       const account = response.data as Account;
       Store.dispatch(accountAddAction(account));
     })
-    .catch(_ => {
+    .catch(() => {
       throw new Error("Account create failed");
     });
 }
