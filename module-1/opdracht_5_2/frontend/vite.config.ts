@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default ({mode}) => {
   let target = "http://localhost:8080";
   if (mode === "production") {
-    // TODO add aws api uri
-    target = "http://localhost:8081"
+    // Aws alb uri
+    target = "http://ecs-cluster-staging-alb-1837777129.us-east-1.elb.amazonaws.com:8080"
   }
 
   const config = {
