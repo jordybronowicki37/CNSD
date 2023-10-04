@@ -77,7 +77,7 @@ jobs:
         IMAGE_TAG: v${{ github.run_number }}
       working-directory: ${{ env.ASSIGNMENT_PATH }}
       run: |
-        docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} .
+        docker build --quiet -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} .
         docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
 
     - name: Tag the build version
