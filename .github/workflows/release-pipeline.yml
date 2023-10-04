@@ -10,11 +10,14 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'module-1/**'
+      - 'module-1/**/frontend/**'
+      - 'module-1/**/pom.xml'
+      - 'module-1/**/src/main/**'
+      - 'module-1/**/src/test/**'
       - '.github/workflows/release-pipeline.yml'
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -109,3 +112,36 @@ jobs:
         release_name: v${{ github.run_number }}
         draft: false
         prerelease: false
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ACTIONS_SECRET }}
+
+      - name: Use Node.js v17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '17.x'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
+
+      - name: Build production version
+        run: npm run build
+        working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Upload to S3
+        run: aws s3 sync dist s3://cnsd-bank-frontend-staging/
+        working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
