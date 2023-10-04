@@ -9,7 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:4173", "https://cnsd-bank-frontend-staging.s3.amazonaws.com/")
+                .allowedOrigins(
+                        "http://localhost:*",
+                        "*://cnsd-bank-frontend-staging.s3.amazonaws.com"
+                )
                 .allowedMethods("*")
                 .allowCredentials(false)
                 .maxAge(3600);
