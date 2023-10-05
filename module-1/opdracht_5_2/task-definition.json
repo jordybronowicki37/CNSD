@@ -1,5 +1,4 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:250360703543:task-definition/account-service-td:8",
   "containerDefinitions": [
     {
       "name": "account-service-container",
@@ -17,7 +16,7 @@
       "environment": [
         {
           "name": "SPRING_PROFILES_ACTIVE",
-          "value": "prod"
+          "value": "test"
         }
       ],
       "environmentFiles": [],
@@ -40,43 +39,8 @@
   "taskRoleArn": "arn:aws:iam::250360703543:role/LabRole",
   "executionRoleArn": "arn:aws:iam::250360703543:role/LabRole",
   "networkMode": "awsvpc",
-  "revision": 8,
   "volumes": [],
-  "status": "ACTIVE",
-  "requiresAttributes": [
-    {
-      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-    },
-    {
-      "name": "ecs.capability.execution-role-awslogs"
-    },
-    {
-      "name": "com.amazonaws.ecs.capability.ecr-auth"
-    },
-    {
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-    },
-    {
-      "name": "com.amazonaws.ecs.capability.task-iam-role"
-    },
-    {
-      "name": "ecs.capability.execution-role-ecr-pull"
-    },
-    {
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    },
-    {
-      "name": "ecs.capability.task-eni"
-    },
-    {
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
-    }
-  ],
   "placementConstraints": [],
-  "compatibilities": [
-    "EC2",
-    "FARGATE"
-  ],
   "requiresCompatibilities": [
     "FARGATE"
   ],
@@ -86,7 +50,5 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2023-10-04T17:16:26.082Z",
-  "registeredBy": "arn:aws:sts::250360703543:assumed-role/voclabs/user2781401=Bronowicki,_Jordy",
   "tags": []
 }
