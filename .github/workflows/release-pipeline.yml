@@ -134,6 +134,12 @@ jobs:
         run: npm install
         working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
 
+      - name: Run the tests
+        run: |
+          npm run lint
+          npm run test
+        working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
+
       - name: Build production version
         run: npm run build
         working-directory: ${{ env.ASSIGNMENT_PATH }}/frontend
