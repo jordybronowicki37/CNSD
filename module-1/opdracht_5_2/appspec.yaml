@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: account-service-td
+        LoadBalancerInfo:
+          ContainerName: "account-service-container"
+          ContainerPort: 8080

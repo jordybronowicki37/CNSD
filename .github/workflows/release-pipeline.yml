@@ -75,15 +75,36 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.DOCKER_SERVICE_NAME }}
         IMAGE_TAG: v${{ github.run_number }}
+        IMAGE_NAME: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
       working-directory: ${{ env.ASSIGNMENT_PATH }}
       run: |
-        docker build --quiet -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} .
-        docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+        docker build --quiet -t ${IMAGE_NAME} .
+        docker push ${IMAGE_NAME}
+        echo "pushed image: ${IMAGE_NAME}"
+        echo "::set-output name=image::${IMAGE_NAME}"
 
     - name: Tag the build version
       run: |
         git tag "Build-v$GITHUB_RUN_NUMBER"
         git push origin "Build-v$GITHUB_RUN_NUMBER" --set-upstream
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ASSIGNMENT_PATH }}/task-definition.json
+        container-name: account-service-container
+        image: ${{ steps.build-image.outputs.image }}
+        environment-variables: "SPRING_PROFILES_ACTIVE=prod"
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: AccountServiceBlueGreen-2
+        cluster: ecs-cluster-staging
+        wait-for-service-stability: true
+        codedeploy-appspec: ${{ env.ASSIGNMENT_PATH }}/appspec.yaml
 
     - name: Create Release
       id: create_release
