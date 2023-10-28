@@ -1,1 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: ASIAULNT7QCFJYYJ4GPP
+      secretKey: 5wRrmvVKOZmzdwcLrVXePOyLGYKBl7VBFeox5NfE
+    region:
+      static: us-east-1
 
+sqs-queue:
+  name: sqs-test
+  url: https://sqs.us-east-1.amazonaws.com/299414552714/sqs-test
