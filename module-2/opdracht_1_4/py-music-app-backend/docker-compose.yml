@@ -1,0 +1,18 @@
+version: '3'
+services:
+  cddb-backend:
+    build: .
+    environment:
+      APP_ENVIRONMENT: development
+    command: ["./wait-for-it.sh", "cddb-mysql:3306", "--", "flask", "run"]  
+    ports:
+      - "28080:8080"
+    restart: always
+  cddb-frontend:
+      depends_on:
+        - cddb-backend
+      image: awassink/cddb-frontend:cloud-v2.2
+      ports:
+        - "20080:80"
+      restart: always
+    
