@@ -1,0 +1,18 @@
+cloud:
+  aws:
+    sqs:
+      test:
+        name: sqs-test
+        url: https://sqs.us-east-1.amazonaws.com/299414552714/sqs-test
+      photo:
+        name: sqs-photo
+        url: https://sqs.us-east-1.amazonaws.com/299414552714/sqs-photo
+
+    s3:
+      sqs-payload:
+        name: cnsd-jb-sqs-large-message-queue
+      photo:
+        name: cnsd-jb-photos
+
+    region:
+      static: us-east-1
