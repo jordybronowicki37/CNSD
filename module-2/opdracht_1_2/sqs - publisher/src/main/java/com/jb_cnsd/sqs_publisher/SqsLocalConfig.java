@@ -2,6 +2,7 @@ package com.jb_cnsd.sqs_publisher;
 
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
 import com.amazon.sqs.javamessaging.ExtendedClientConfiguration;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -30,28 +31,40 @@ public class SqsLocalConfig {
     private String awsSessionToken;
 
     @Bean
+    public AWSCredentialsProvider awsCredentialsProvider() {
+        return new AWSStaticCredentialsProvider(new BasicSessionCredentials(awsAccessKey, awsSecretKey, awsSessionToken));
+    }
+
+    @Bean
     @Primary
-    public AmazonSQSAsync amazonSQSAsync() {
+    public AmazonSQSAsync amazonSQSAsync(AWSCredentialsProvider awsCredentialsProvider) {
         return AmazonSQSAsyncClientBuilder
                 .standard()
                 .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(
-                        new BasicSessionCredentials(awsAccessKey, awsSecretKey, awsSessionToken)))
+                .withCredentials(awsCredentialsProvider)
                 .build();
     }
 
     @Bean("s3Client")
-    public AmazonS3 amazonS3Client() {
-        return AmazonS3ClientBuilder.standard().withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicSessionCredentials(awsAccessKey, awsSecretKey, awsSessionToken))
-                ).build();
+    public AmazonS3 amazonS3Client(AWSCredentialsProvider awsCredentialsProvider) {
+        return AmazonS3ClientBuilder
+                .standard()
+                .withRegion(region)
+                .withCredentials(awsCredentialsProvider)
+                .build();
     }
 
     @Bean
-    public AmazonSQSExtendedClient amazonSQSExtendedClient(ExtendedClientConfiguration extendedClientConfig) {
-        return new AmazonSQSExtendedClient(AmazonSQSClientBuilder
-                .standard().withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicSessionCredentials(awsAccessKey, awsSecretKey, awsSessionToken))
-                ).withRegion(region).build(), extendedClientConfig);
+    public AmazonSQSExtendedClient amazonSQSExtendedClient(
+            ExtendedClientConfiguration extendedClientConfig,
+            AWSCredentialsProvider awsCredentialsProvider) {
+        return new AmazonSQSExtendedClient(
+                AmazonSQSClientBuilder
+                        .standard()
+                        .withRegion(region)
+                        .withCredentials(awsCredentialsProvider)
+                        .withRegion(region)
+                        .build(),
+                extendedClientConfig);
     }
 }

@@ -45,7 +45,9 @@ public class AwsLocalConfig {
     }
 
     @Bean("amazonSQSExtendedClient")
-    public AmazonSQSExtendedClient amazonSQSExtendedClient(final ExtendedClientConfiguration extendedClientConfig, final AWSStaticCredentialsProvider awsCredentialsProvider) {
+    public AmazonSQSExtendedClient amazonSQSExtendedClient(
+            final ExtendedClientConfiguration extendedClientConfig,
+            final AWSStaticCredentialsProvider awsCredentialsProvider) {
         return new AmazonSQSExtendedClient(
                 AmazonSQSClientBuilder
                     .standard()

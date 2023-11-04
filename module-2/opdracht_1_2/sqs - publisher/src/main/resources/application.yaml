@@ -16,3 +16,21 @@ cloud:
 
     region:
       static: us-east-1
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          aws:
+            messaging: INFO
+    com:
+      amazonaws: INFO
+
