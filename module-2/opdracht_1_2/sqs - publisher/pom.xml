@@ -13,9 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>sqs - publisher</name>
     <description>sqs - publisher</description>
+
     <properties>
         <java.version>17</java.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -36,11 +39,9 @@
             <version>2.2.6.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-aws-dependencies</artifactId>
-            <version>2.2.6.RELEASE</version>
-            <type>pom</type>
-            <scope>import</scope>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>amazon-sqs-java-extended-client-lib</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
@@ -55,12 +56,25 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <jvmArguments>-Dcom.amazonaws.sdk.disableEc2Metadata=true</jvmArguments>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
