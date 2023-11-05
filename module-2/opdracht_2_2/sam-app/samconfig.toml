@@ -14,11 +14,11 @@ parallel = true
 lint = true
 
 [default.deploy.parameters]
-capabilities = "CAPABILITY_IAM"
-confirm_changeset = true
-resolve_s3 = true
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-bzavdne4uu5k"
 s3_prefix = "sam-app"
 region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
 image_repositories = []
 
 [default.package.parameters]
