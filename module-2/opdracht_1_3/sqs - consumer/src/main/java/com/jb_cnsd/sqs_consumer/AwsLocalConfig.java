@@ -2,16 +2,16 @@ package com.jb_cnsd.sqs_consumer;
 
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
 import com.amazon.sqs.javamessaging.ExtendedClientConfiguration;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 @Profile("dev")
 @Configuration
@@ -31,12 +31,12 @@ public class AwsLocalConfig {
     private String awsSessionToken;
 
     @Bean("awsCredentialsProvider")
-    public AWSStaticCredentialsProvider awsCredentialsProvider() {
+    public AWSCredentialsProvider awsCredentialsProvider() {
         return new AWSStaticCredentialsProvider(new BasicSessionCredentials(awsAccessKey, awsSecretKey, awsSessionToken));
     }
 
     @Bean("s3Client")
-    public AmazonS3 amazonS3Client(final AWSStaticCredentialsProvider awsCredentialsProvider) {
+    public AmazonS3 amazonS3Client(final AWSCredentialsProvider awsCredentialsProvider) {
         return AmazonS3ClientBuilder
                 .standard()
                 .withRegion(region)
@@ -47,7 +47,7 @@ public class AwsLocalConfig {
     @Bean("amazonSQSExtendedClient")
     public AmazonSQSExtendedClient amazonSQSExtendedClient(
             final ExtendedClientConfiguration extendedClientConfig,
-            final AWSStaticCredentialsProvider awsCredentialsProvider) {
+            final AWSCredentialsProvider awsCredentialsProvider) {
         return new AmazonSQSExtendedClient(
                 AmazonSQSClientBuilder
                     .standard()
@@ -55,5 +55,15 @@ public class AwsLocalConfig {
                     .withCredentials(awsCredentialsProvider)
                     .build(),
                 extendedClientConfig);
+    }
+
+    @Primary
+    @Bean("snsClient")
+    public AmazonSNS amazonSNSClient(final AWSCredentialsProvider awsCredentialsProvider) {
+        return AmazonSNSClientBuilder
+                .standard()
+                .withRegion(region)
+                .withCredentials(awsCredentialsProvider)
+                .build();
     }
 }

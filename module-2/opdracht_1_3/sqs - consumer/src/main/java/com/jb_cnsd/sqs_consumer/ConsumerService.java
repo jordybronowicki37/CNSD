@@ -7,8 +7,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.Base64;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,13 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ConsumerService {
+    @Value("${cloud.aws.sns.photo.name}")
+    private String photoEventTopic;
+
     @Value("${cloud.aws.s3.photo.name}")
     private String photoBucket;
 
+    public final NotificationMessagingTemplate notificationMessagingTemplate;
     public final AmazonS3 s3Client;
 
     @SqsListener("${cloud.aws.sqs.test.url}")
@@ -43,5 +47,8 @@ public class ConsumerService {
 
         s3Client.putObject(req);
         log.info("Photo saved to [{}] [{}] [{}]", photoBucket, objectKey, objectUrl);
+
+        notificationMessagingTemplate.sendNotification(photoEventTopic, "Photo processed and available for download. "+objectUrl, "Awesome photo processing done");
+        log.info("Notification send to subscribers via SNS");
     }
 }

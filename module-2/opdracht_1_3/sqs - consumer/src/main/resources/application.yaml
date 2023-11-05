@@ -14,5 +14,9 @@ cloud:
       photo:
         name: cnsd-jb-photos
 
+    sns:
+      photo:
+        name: photo-processing-topic
+
     region:
       static: us-east-1
