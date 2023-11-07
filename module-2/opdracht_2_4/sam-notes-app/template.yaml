@@ -5,41 +5,72 @@ Description: >
 
   Sample SAM Template for sam-notes-app
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 50
     MemorySize: 128
-
     Tracing: Active
+    Handler: app.lambda_handler
+    Runtime: python3.9
+    Architectures:
+      - x86_64
   Api:
     TracingEnabled: true
+
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  NotesRestApi:
+    Type: AWS::Serverless::Api
     Properties:
-      CodeUri: hello_world/
+      StageName: Prod
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ./swagger-spec.json
+      MethodSettings:
+        - ResourcePath: '/*'
+          HttpMethod: '*'
+          LoggingLevel: INFO
+          MetricsEnabled: true
+      AccessLogSetting:
+        DestinationArn: !GetAtt AccessLogGroup.Arn
+        Format: '{"requestTime":"$context.requestTime","requestId":"$context.requestId","httpMethod":"$context.httpMethod","path":"$context.path","routeKey":"$context.routeKey","status":$context.status,"responseLatency":$context.responseLatency}'
+  AccessLogGroup:
+    Type: AWS::Logs::LogGroup
+  GetNotesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_notes/
       Handler: app.lambda_handler
-      Runtime: python3.9
-      Architectures:
-      - x86_64
+      Role: arn:aws:iam::299414552714:role/LabRole
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        GetNotes:
+          Type: Api
           Properties:
-            Path: /hello
+            RestApiId: !Ref "NotesRestApi"
+            Path: /notes
             Method: get
+  PostNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: post_note/
+      Handler: app.lambda_handler
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        NotesApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /notes
+            Method: post
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  GetNotesApi:
+    Description: "API Gateway endpoint URL for Prod stage for Notes function"
+    Value: !Sub "https://${NotesRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/notes/"
+  GetNotesFunction:
+    Description: "GetNotesFunction Function ARN"
+    Value: !GetAtt GetNotesFunction.Arn
+  PostNoteFunction:
+    Description: "PostNoteFunction Function ARN"
+    Value: !GetAtt PostNoteFunction.Arn

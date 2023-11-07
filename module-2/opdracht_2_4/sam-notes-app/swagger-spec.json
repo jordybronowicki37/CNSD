@@ -1,0 +1,45 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0",
+    "title" : "notes-api"
+  },
+  "paths" : {
+    "/notes" : {
+      "get" : {
+        "summary": "Returns a list of all notes",
+        "produces": [
+          "application/json"
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNotesFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      },
+      "post" : {
+        "summary": "Creates a new note",
+         "produces": [
+          "application/json"
+         ],
+         "responses" : {
+            "200": {
+              "description": "OK"
+            }
+          },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostNoteFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      }
+    }
+  }
+}
