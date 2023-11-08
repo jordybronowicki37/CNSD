@@ -5,11 +5,15 @@
     "title" : "notes-api"
   },
   "paths" : {
-    "/notes" : {
+    "/users/{user_id}/notes" : {
       "get" : {
-        "summary": "Returns a list of all notes",
-        "produces": [
-          "application/json"
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
         ],
         "responses" : {
           "200": {
@@ -24,15 +28,19 @@
         }
       },
       "post" : {
-        "summary": "Creates a new note",
-         "produces": [
-          "application/json"
-         ],
-         "responses" : {
-            "200": {
-              "description": "OK"
-            }
-          },
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        },
         "x-amazon-apigateway-integration" : {
           "httpMethod" : "POST",
           "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostNoteFunction.Arn}/invocations"},
