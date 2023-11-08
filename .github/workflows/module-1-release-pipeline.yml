@@ -20,11 +20,13 @@ jobs:
   build-backend:
     runs-on: ubuntu-latest
 
+    permissions:
+      actions: write
+      contents: write
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.ACTIONS_SECRET }}
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -111,7 +113,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        token: ${{ secrets.ACTIONS_SECRET }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         name: v${{ github.run_number }}
         tag_name: v${{ github.run_number }}
         draft: false
@@ -119,11 +121,14 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.ACTIONS_SECRET }}
 
       - name: Use Node.js v17.x
         uses: actions/setup-node@v3
