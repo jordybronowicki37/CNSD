@@ -14,7 +14,7 @@ on:
       - 'module-1/**/pom.xml'
       - 'module-1/**/src/main/**'
       - 'module-1/**/src/test/**'
-      - '.github/workflows/release-pipeline.yml'
+      - '.github/workflows/module-1-release-pipeline.yml'
 
 jobs:
   build-backend:
