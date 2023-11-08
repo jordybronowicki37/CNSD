@@ -2,7 +2,7 @@ name: SAM Release pipeline
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths:
       - 'module-2/opdracht_2_4'
       - '.github/workflows/assignment-2-2-4-sam-notes-app-release-pipeline.yml'
