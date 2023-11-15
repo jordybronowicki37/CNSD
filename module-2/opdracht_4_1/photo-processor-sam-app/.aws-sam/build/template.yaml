@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'photo-processor-sam-app
+
+  Sample SAM Template for photo-processor-sam-app
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HelloWorldFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Architectures:
+      - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      SamResourceId: HelloWorldFunction
+  PhotoProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PhotoProcessorFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Tracing: Active
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        PhotoUploadSQSEvent:
+          Type: SQS
+          Properties:
+            Queue: arn:aws:sqs:us-east-1:299414552714:sqs-photo
+            BatchSize: 1
+    Metadata:
+      SamResourceId: PhotoProcessorFunction
+  EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventPattern:
+        source:
+        - custom.photo-processor
+        detail-type:
+        - photo_processed_event
+      EventBusName: photo-processor-event-bus
+      Targets:
+      - Arn: arn:aws:sns:us-east-1:299414552714:photo-processing-topic
+        Id: photo-processing-topic
+  EventBridgeToToSnsPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: sns:Publish
+          Resource: arn:aws:sns:us-east-1:299414552714:photo-processing-topic
+      Topics:
+      - arn:aws:sns:us-east-1:299414552714:photo-processing-topic
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  HelloWorldFunction:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunction
+      - Arn
+  PhotoProcessorFunction:
+    Description: Photo Processor Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - PhotoProcessorFunction
+      - Arn
+  EventRule:
+    Description: Event Rule ARN
+    Value:
+      Fn::GetAtt:
+      - EventRule
+      - Arn
