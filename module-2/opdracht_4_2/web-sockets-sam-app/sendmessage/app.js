@@ -20,9 +20,11 @@ exports.handler = async event => {
     apiVersion: '2018-11-29',
     endpoint: event.requestContext.domainName + '/' + event.requestContext.stage
   });
-  
-  const postData = JSON.parse(event.body).data;
-  
+
+  console.log(`event data ${ JSON.stringify(event)}`);
+  const postData = JSON.stringify(JSON.parse(event.body).data);
+  console.log(`websocket post data ${JSON.stringify(postData)}`);
+
   const postCalls = connectionData.Items.map(async ({ connectionId }) => {
     try {
       await apigwManagementApi.postToConnection({ ConnectionId: connectionId, Data: postData }).promise();
@@ -31,6 +33,7 @@ exports.handler = async event => {
         console.log(`Found stale connection, deleting ${connectionId}`);
         await ddb.delete({ TableName: TABLE_NAME, Key: { connectionId } }).promise();
       } else {
+        console.log(`Error sending message to websocket ${e}`);
         throw e;
       }
     }
