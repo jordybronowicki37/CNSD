@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {HomePage} from "./pages/HomePage.tsx";
+import useWebSocket from "react-use-websocket";
+import {useDispatch} from "react-redux";
+import {EventTypes, Message, WSReceiveEvent} from "./data/Types";
+import {messagesAddAction} from "./data/reducers/MessagesReducer.ts";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+
+  useWebSocket(import.meta.env.VITE_WS_URI, {
+    share: true,
+    onOpen:  () => console.log("Connection opened ✅"),
+    onClose: () => console.log("Connection closed 🛑"),
+    onError: () => console.log("Connection error ❌"),
+    onMessage: (e) => {
+      const data = JSON.parse(e.data) as WSReceiveEvent<Message>;
+
+      if (data.type === EventTypes.NewMessageEvent) {
+        dispatch(messagesAddAction(data.content));
+      } else {
+        console.error("An unrecognised event was received.");
+        console.error(e);
+      }
+    },
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <HomePage />
+    </div>
   )
 }
 
