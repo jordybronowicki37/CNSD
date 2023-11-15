@@ -1,5 +1,5 @@
 import {Message} from "../data/Types.ts";
-import "./MessageItem.css";
+import "./MessageItem.scss";
 
 export type MessageItemProps = {
   message: Message,

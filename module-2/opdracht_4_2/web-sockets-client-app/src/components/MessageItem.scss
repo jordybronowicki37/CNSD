@@ -1,0 +1,18 @@
+.message-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  width: 70%;
+  .message-top {
+    display: flex;
+    justify-content: space-between;
+  }
+  &.message-by-current-user {
+    background-color: #549d0b;
+    align-self: end;
+  }
+  :not(.message-by-current-user) {
+    background-color: #1c469d;
+  }
+}

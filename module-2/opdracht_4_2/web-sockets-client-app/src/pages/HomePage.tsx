@@ -5,7 +5,7 @@ import {FormEvent, useContext, useEffect, useRef, useState} from "react";
 import {MessageItem} from "../components/MessageItem.tsx";
 import {WebSocketContext} from "../data/webSocket/WebSocketContext.ts";
 import {ConnectionStatus} from "../components/ConnectionStatus.tsx";
-import "./HomePage.css";
+import "./HomePage.scss";
 import {currentUserSetAction} from "../data/reducers/CurrentUserReducer.ts";
 
 export function HomePage() {
