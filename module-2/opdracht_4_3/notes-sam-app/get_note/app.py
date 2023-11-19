@@ -1,10 +1,11 @@
+from os import environ
 import json
 import boto3
 from aws_xray_sdk.core import patch_all
 
 patch_all()
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('notes')
+table = dynamodb.Table(environ['NOTES_TABLE_NAME'])
 
 
 def lambda_handler(event, context):

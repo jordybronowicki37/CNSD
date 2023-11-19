@@ -5,6 +5,17 @@ Description: >
 
   Sample SAM Template for sam-notes-app
 
+Parameters:
+  LabRole:
+    Type: String
+    Default: 'arn:aws:iam::299414552714:role/LabRole'
+  NotesTable:
+    Type: String
+    Default: "notes"
+  WSConnectionsTable:
+    Type: String
+    Default: "notes-ws-connections"
+
 Globals:
   Function:
     Timeout: 50
@@ -14,6 +25,10 @@ Globals:
     Runtime: python3.9
     Architectures:
       - x86_64
+    Environment:
+      Variables:
+        NOTES_TABLE_NAME: !Ref NotesTable
+        CONNECTIONS_TABLE_NAME: !Ref WSConnectionsTable
   Api:
     TracingEnabled: true
 
@@ -41,7 +56,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: get_notes/
-      Role: arn:aws:iam::299414552714:role/LabRole
+      Role: !Ref LabRole
       Events:
         GetNotes:
           Type: Api
@@ -53,7 +68,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: post_note/
-      Role: arn:aws:iam::299414552714:role/LabRole
+      Role: !Ref LabRole
       Events:
         NotesApi:
           Type: Api
@@ -65,7 +80,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: get_note/
-      Role: arn:aws:iam::299414552714:role/LabRole
+      Role: !Ref LabRole
       Events:
         GetNotes:
           Type: Api
@@ -77,7 +92,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: put_note/
-      Role: arn:aws:iam::299414552714:role/LabRole
+      Role: !Ref LabRole
       Events:
         NotesApi:
           Type: Api
@@ -89,7 +104,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: delete_note/
-      Role: arn:aws:iam::299414552714:role/LabRole
+      Role: !Ref LabRole
       Events:
         NotesApi:
           Type: Api
@@ -101,7 +116,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
-      TableName: notes
+      TableName: !Ref NotesTable
       AttributeDefinitions:
         - AttributeName: PK
           AttributeType: S

@@ -1,3 +1,4 @@
+from os import environ
 import json
 import boto3
 import uuid
@@ -5,14 +6,13 @@ from aws_xray_sdk.core import patch_all
 
 patch_all()
 dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table(environ['NOTES_TABLE_NAME'])
 
 
 def lambda_handler(event, context):
     print(f"{event = }")
     user_id = event['pathParameters']['user_id']
     body = json.loads(event["body"])
-
-    table = dynamodb.Table('notes')
 
     item = {
         'PK': f'USER#{user_id}',
