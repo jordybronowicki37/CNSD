@@ -1,0 +1,96 @@
+name: SAM Release pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'module-2/opdracht_4_3'
+      - '.github/workflows/assignment-2-4-3-sam-notes-app-release-pipeline.yml'
+  workflow_dispatch:
+
+env:
+  ROOT_DIRECTORY: './module-2/opdracht_4_3'
+
+jobs:
+  build-sam:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: '${{ env.ROOT_DIRECTORY }}/notes-sam-app'
+
+    permissions:
+      actions: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Set up SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Build the serverless application
+        run: sam build
+
+      - name: Deploy the serverless application
+        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: v${{ github.run_number }}
+          tag_name: v${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: '${{ env.ROOT_DIRECTORY }}/notes-frontend'
+
+    permissions:
+      actions: write
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js v17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '17.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build production version
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Upload to S3
+        run: aws s3 sync dist s3://cnsd-bank-frontend-staging/
