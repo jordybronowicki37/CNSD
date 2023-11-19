@@ -30,7 +30,7 @@
   }
   .login-modal {
     border-radius: 1rem;
-    ::backdrop {
+    &::backdrop {
       backdrop-filter: blur(5px);
     }
   }

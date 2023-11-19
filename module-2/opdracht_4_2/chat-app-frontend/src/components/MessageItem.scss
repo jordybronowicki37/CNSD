@@ -12,7 +12,7 @@
     background-color: #549d0b;
     align-self: end;
   }
-  :not(.message-by-current-user) {
+  &:not(.message-by-current-user) {
     background-color: #1c469d;
   }
 }
