@@ -5,24 +5,23 @@ from boto3.dynamodb.conditions import Key, Attr
 
 patch_all()
 dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('notes')
 
 
 def lambda_handler(event, context):
-    print(f"{event =} {type(event)}")
+    print(f"{event = }")
     user_id = event['pathParameters']['user_id']
 
-    table = dynamodb.Table('notes')
-    notes = []
-    done = False
-
-    while not done:
-        response = table.scan(FilterExpression=Key('PK').begins_with(f"USER#{user_id}") & Attr('Type').eq('NOTE'))
-        print(f"{response}")
-        notes += response['Items']
-        start_key = response.get('LastEvaluatedKey', None)
-        done = start_key is None
+    response = table.query(
+        KeyConditionExpression=Key('PK').eq(f"USER#{user_id}") & Key('SK').begins_with("NOTE#"),
+    )
+    print(f"{response = }")
 
     return {
         "statusCode": 200,
-        "body": json.dumps(notes)
+        "body": json.dumps(response['Items']),
+        "headers": {
+            "content-type": "application/json"
+        },
+        "isBase64Encoded": False
     }

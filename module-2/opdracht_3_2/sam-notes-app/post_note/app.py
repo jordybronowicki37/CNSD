@@ -8,8 +8,7 @@ dynamodb = boto3.resource('dynamodb')
 
 
 def lambda_handler(event, context):
-    print(f"{event =} {type(event)}")
-
+    print(f"{event = }")
     user_id = event['pathParameters']['user_id']
     body = json.loads(event["body"])
 
@@ -18,14 +17,18 @@ def lambda_handler(event, context):
     item = {
         'PK': f'USER#{user_id}',
         'SK': f'NOTE#{str(uuid.uuid4())}',
-        'text': body["text"],
+        'Text': body["text"],
         'Type': 'NOTE'
     }
 
     response = table.put_item(Item=item)
-    print(f"{response =} {type(response)}")
+    print(f"{response = }")
 
     return {
-        "statusCode": 200,
-        "body": json.dumps(item)
+        "statusCode": 201,
+        "body": json.dumps(item),
+        "headers": {
+            "content-type": "application/json"
+        },
+        "isBase64Encoded": False
     }
