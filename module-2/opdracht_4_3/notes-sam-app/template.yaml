@@ -37,10 +37,22 @@ Globals:
       Variables:
         NOTES_TABLE_NAME: !Ref NotesTable
         CONNECTIONS_TABLE_NAME: !Ref WSConnectionsTable
+        WS_API_GATEWAY_URL: !Sub "https://${SimpleNotesWebSocket}.execute-api.${AWS::Region}.amazonaws.com/Prod"
   Api:
     TracingEnabled: true
 
 Resources:
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: common-dependency-layer
+      Description: Dependencies required for my Python lambdas
+      ContentUri: common/
+      CompatibleRuntimes:
+        - python3.9
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: python3.9
   NotesRestApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -77,6 +89,8 @@ Resources:
     Properties:
       CodeUri: post_note/
       Role: !Ref LabRole
+      Layers:
+        - !Ref CommonLayer
       Events:
         NotesApi:
           Type: Api
@@ -101,6 +115,8 @@ Resources:
     Properties:
       CodeUri: put_note/
       Role: !Ref LabRole
+      Layers:
+        - !Ref CommonLayer
       Events:
         NotesApi:
           Type: Api
@@ -113,6 +129,8 @@ Resources:
     Properties:
       CodeUri: delete_note/
       Role: !Ref LabRole
+      Layers:
+        - !Ref CommonLayer
       Events:
         NotesApi:
           Type: Api
@@ -136,7 +154,7 @@ Resources:
         - AttributeName: SK
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
-      
+
   ## WebSockets basics
   SimpleNotesWebSocket:
     Type: AWS::ApiGatewayV2::Api
@@ -393,6 +411,9 @@ Outputs:
   GetNotesApi:
     Description: "API Gateway endpoint URL for Prod stage for Notes function"
     Value: !Sub "https://${NotesRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/notes/"
+  SimpleNotesWebSocket:
+    Description: "API Gateway endpoint URL for Prod stage for Notes function"
+    Value: !Sub "https://${SimpleNotesWebSocket}.execute-api.${AWS::Region}.amazonaws.com/Prod"
   GetNotesFunction:
     Description: "GetNotesFunction Function ARN"
     Value: !GetAtt GetNotesFunction.Arn
