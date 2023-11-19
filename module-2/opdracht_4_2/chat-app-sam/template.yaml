@@ -9,19 +9,28 @@ Description: >
 Parameters:
   TableName:
     Type: String
-    Default: 'simplechat_connections'
+    Default: 'chat_app_connections'
     Description: (Required) The name of the new DynamoDB to store connection identifiers for each connected clients. Minimum 3 characters
     MinLength: "3"
     MaxLength: "50"
     AllowedPattern: ^[A-Za-z_]+$
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
+  LabRole:
+    Type: String
+    Default: 'arn:aws:iam::299414552714:role/LabRole'
 
 Globals:
   Function:
     Timeout: 10
-    MemorySize: 256
-    Runtime: nodejs14.x
-    Handler: app.handler
+    MemorySize: 128
+    Tracing: Active
+    Handler: app.lambda_handler
+    Runtime: python3.9
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        CONNECTIONS_TABLE_NAME: !Ref TableName
 
 Resources:
   SimpleChatWebSocket:
@@ -40,8 +49,8 @@ Resources:
       Target: !Join
         - '/'
         - - 'integrations'
-          - !Ref ConnectInteg
-  ConnectInteg:
+          - !Ref ConnectIntegration
+  ConnectIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
       ApiId: !Ref SimpleChatWebSocket
@@ -60,8 +69,8 @@ Resources:
       Target: !Join
         - '/'
         - - 'integrations'
-          - !Ref DisconnectInteg
-  DisconnectInteg:
+          - !Ref DisconnectIntegration
+  DisconnectIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
       ApiId: !Ref SimpleChatWebSocket
@@ -80,8 +89,8 @@ Resources:
       Target: !Join
         - '/'
         - - 'integrations'
-          - !Ref SendInteg
-  SendInteg:
+          - !Ref SendIntegration
+  SendIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
       ApiId: !Ref SimpleChatWebSocket
@@ -123,8 +132,8 @@ Resources:
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: arn:aws:iam::299414552714:role/LabRole
-      CodeUri: onconnect/
+      Role: !Ref LabRole
+      CodeUri: on_connect/
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
@@ -139,8 +148,8 @@ Resources:
   OnDisconnectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: arn:aws:iam::299414552714:role/LabRole
-      CodeUri: ondisconnect/
+      Role: !Ref LabRole
+      CodeUri: on_disconnect/
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
@@ -155,8 +164,8 @@ Resources:
   SendMessageFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: arn:aws:iam::299414552714:role/LabRole
-      CodeUri: sendmessage/
+      Role: !Ref LabRole
+      CodeUri: send_message/
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
