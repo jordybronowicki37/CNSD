@@ -1,0 +1,135 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-notes-app
+
+  Sample SAM Template for sam-notes-app
+
+Globals:
+  Function:
+    Timeout: 50
+    MemorySize: 128
+    Tracing: Active
+    Handler: app.lambda_handler
+    Runtime: python3.9
+    Architectures:
+      - x86_64
+  Api:
+    TracingEnabled: true
+
+Resources:
+  NotesRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ./swagger-spec.json
+      MethodSettings:
+        - ResourcePath: '/*'
+          HttpMethod: '*'
+          LoggingLevel: INFO
+          MetricsEnabled: true
+      AccessLogSetting:
+        DestinationArn: !GetAtt AccessLogGroup.Arn
+        Format: '{"requestTime":"$context.requestTime","requestId":"$context.requestId","httpMethod":"$context.httpMethod","path":"$context.path","routeKey":"$context.routeKey","status":$context.status,"responseLatency":$context.responseLatency}'
+  AccessLogGroup:
+    Type: AWS::Logs::LogGroup
+  GetNotesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_notes/
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        GetNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /users/{user_id}/notes
+            Method: get
+  PostNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: post_note/
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        NotesApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /users/{user_id}/notes
+            Method: post
+  GetNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_note/
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        GetNotes:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /users/{user_id}/notes/{note_id}
+            Method: get
+  PutNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: put_note/
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        NotesApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /users/{user_id}/notes/{note_id}
+            Method: put
+  DeleteNoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete_note/
+      Role: arn:aws:iam::299414552714:role/LabRole
+      Events:
+        NotesApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "NotesRestApi"
+            Path: /users/{user_id}/notes/{note_id}
+            Method: delete
+  NotesDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: notes
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+Outputs:
+  GetNotesApi:
+    Description: "API Gateway endpoint URL for Prod stage for Notes function"
+    Value: !Sub "https://${NotesRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/notes/"
+  GetNotesFunction:
+    Description: "GetNotesFunction Function ARN"
+    Value: !GetAtt GetNotesFunction.Arn
+  PostNoteFunction:
+    Description: "PostNoteFunction Function ARN"
+    Value: !GetAtt PostNoteFunction.Arn
+  GetNoteFunction:
+    Description: "GetNoteFunction Function ARN"
+    Value: !GetAtt GetNoteFunction.Arn
+  PutNoteFunction:
+    Description: "PutNoteFunction Function ARN"
+    Value: !GetAtt PutNoteFunction.Arn
+  DeleteNoteFunction:
+    Description: "DeleteNoteFunction Function ARN"
+    Value: !GetAtt DeleteNoteFunction.Arn

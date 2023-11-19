@@ -1,0 +1,145 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0",
+    "title" : "notes-api"
+  },
+  "paths" : {
+    "/users/{user_id}/notes" : {
+      "get" : {
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNotesFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      },
+      "post" : {
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "201": {
+            "description": "OK"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostNoteFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      }
+    },
+    "/users/{user_id}/notes/{note_id}" : {
+      "get" : {
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "name" : "note_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT_FOUND"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNoteFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      },
+      "put" : {
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "name" : "note_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT_FOUND"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutNoteFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      },
+      "delete" : {
+        "parameters" : [
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "name" : "note_id",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "responses" : {
+          "204": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "OK"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : {"Fn::Sub" : "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteNoteFunction.Arn}/invocations"},
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      }
+    }
+  }
+}
