@@ -137,7 +137,7 @@ Resources:
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
       
-  ## WebSockets
+  ## WebSockets basics
   SimpleNotesWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
@@ -243,6 +243,68 @@ Resources:
       SSESpecification:
         SSEEnabled: True
       TableName: !Ref WSConnectionsTable
+
+  ## WebSockets Expanded
+  PostNoteRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      RouteKey: post_note
+      AuthorizationType: NONE
+      OperationName: PostNoteRoute
+      Target: !Join
+        - '/'
+        - - 'integrations'
+          - !Ref PostNoteIntegration
+  PostNoteIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      Description: Post note integration
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Sub:
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostNoteFunction.Arn}/invocations
+  PutNoteRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      RouteKey: put_note
+      AuthorizationType: NONE
+      OperationName: PutNoteRoute
+      Target: !Join
+        - '/'
+        - - 'integrations'
+          - !Ref PutNoteIntegration
+  PutNoteIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      Description: Put note integration
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Sub:
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutNoteFunction.Arn}/invocations
+  DeleteNoteRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      RouteKey: delete_note
+      AuthorizationType: NONE
+      OperationName: DeleteNoteRoute
+      Target: !Join
+        - '/'
+        - - 'integrations'
+          - !Ref DeleteNoteIntegration
+  DeleteNoteIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      Description: Delete note integration
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Sub:
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteNoteFunction.Arn}/invocations
 
   ## Deployment
   Deployment:
