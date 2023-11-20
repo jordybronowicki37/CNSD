@@ -265,9 +265,6 @@ Resources:
     Properties:
       Role: !Ref LabRole
       CodeUri: send_message/
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref WSConnectionsTable
   ConnectionsTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -289,7 +286,7 @@ Resources:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref SimpleNotesWebSocket
-      RouteKey: post_note
+      RouteKey: notepost
       AuthorizationType: NONE
       OperationName: PostNoteRoute
       Target: !Join
@@ -309,7 +306,7 @@ Resources:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref SimpleNotesWebSocket
-      RouteKey: put_note
+      RouteKey: noteput
       AuthorizationType: NONE
       OperationName: PutNoteRoute
       Target: !Join
@@ -329,7 +326,7 @@ Resources:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref SimpleNotesWebSocket
-      RouteKey: delete_note
+      RouteKey: notedelete
       AuthorizationType: NONE
       OperationName: DeleteNoteRoute
       Target: !Join
@@ -353,6 +350,9 @@ Resources:
       - ConnectRoute
       - SendRoute
       - DisconnectRoute
+      - PostNoteRoute
+      - PutNoteRoute
+      - DeleteNoteRoute
     Properties:
       ApiId: !Ref SimpleNotesWebSocket
   Stage:
