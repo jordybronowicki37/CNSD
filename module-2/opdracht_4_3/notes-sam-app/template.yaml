@@ -215,9 +215,31 @@ Resources:
     Properties:
       Role: !Ref LabRole
       CodeUri: on_disconnect/
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref WSConnectionsTable
+  DefaultRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      RouteKey: $default
+      AuthorizationType: NONE
+      OperationName: DefaultRoute
+      Target: !Join
+        - '/'
+        - - 'integrations'
+          - !Ref DefaultIntegration
+  DefaultIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref SimpleNotesWebSocket
+      Description: Default Integration
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Sub:
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OnDefaultFunction.Arn}/invocations
+  OnDefaultFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Ref LabRole
+      CodeUri: on_default/
   SendRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
