@@ -1,3 +1,4 @@
+import json
 from os import environ
 import boto3
 from aws_xray_sdk.core import patch_all
@@ -10,8 +11,17 @@ table = dynamodb.Table(environ['NOTES_TABLE_NAME'])
 
 def lambda_handler(event, context):
     print(f"{event = }")
-    user_id = event['pathParameters']['user_id']
-    note_id = event['pathParameters']['note_id']
+
+    # Triggered over http
+    if "pathParameters" in event:
+        user_id = event['pathParameters']['user_id']
+        note_id = event['pathParameters']['note_id']
+    # Triggered over WS
+    else:
+        body = json.loads(event["body"])
+        print(f"{body = }")
+        user_id = body['user_id']
+        note_id = body['note_id']
 
     item = {
         'PK': f'USER#{user_id}',
@@ -23,7 +33,7 @@ def lambda_handler(event, context):
     )
     print(f"{response = }")
 
-    notify_users(event, "deleted_note", item)
+    notify_users(event, "note/deleted", item)
 
     if 'Attributes' not in response:
         return {

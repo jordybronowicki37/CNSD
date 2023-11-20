@@ -12,10 +12,18 @@ table = dynamodb.Table(environ['NOTES_TABLE_NAME'])
 
 def lambda_handler(event, context):
     print(f"{event = }")
-    user_id = event['pathParameters']['user_id']
-    note_id = event['pathParameters']['note_id']
+
     body = json.loads(event["body"])
     print(f"{body = }")
+
+    # Triggered over http
+    if "pathParameters" in event:
+        user_id = event['pathParameters']['user_id']
+        note_id = event['pathParameters']['note_id']
+    # Triggered over WS
+    else:
+        user_id = body['user_id']
+        note_id = body['note_id']
 
     try:
         response = table.update_item(
@@ -35,7 +43,7 @@ def lambda_handler(event, context):
         )
         print(f"{response = }")
 
-        notify_users(event, "updated_note", response['Attributes'])
+        notify_users(event, "note/updated", response['Attributes'])
 
         return {
             'statusCode': 200,
