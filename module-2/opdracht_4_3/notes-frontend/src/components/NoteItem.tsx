@@ -1,5 +1,5 @@
 import "./NoteItem.scss";
-import {Note} from "../data/Types";
+import {Note} from "../data/Types.ts";
 
 export type NoteItemProps = {
   note: Note,
@@ -9,11 +9,10 @@ export function NoteItem({note}: NoteItemProps) {
   return (
     <div className="note-item">
       <div className="note-top">
-        <div className="note-owner">{note.owner}</div>
-        <div>{formatDate(note.created)}</div>
+        <div className="note-owner">{note.User}</div>
       </div>
       <div className="note-content">
-        {note.body}
+        {note.Text}
       </div>
     </div>
   )
