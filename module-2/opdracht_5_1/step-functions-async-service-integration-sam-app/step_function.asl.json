@@ -1,0 +1,18 @@
+{
+  "Comment": "Travel Agent",
+  "StartAt": "Submit Job",
+  "States": {
+    "Submit Job": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "Parameters": {
+        "FunctionName": "${SubmitJobFunctionArn}",
+        "Payload": {
+          "TaskToken.$": "$$.Task.Token"
+        }
+      },
+      "TimeoutSeconds": 10,
+      "End": true
+    }
+  }
+}

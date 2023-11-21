@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Sample SAM Template for assignment-2-5-1
+
+Globals:
+  Function:
+    Timeout: 50
+    Runtime: python3.9
+    Tracing: Active
+    Handler: app.lambda_handler
+  Api:
+    TracingEnabled: True
+
+Parameters:
+  LabRole:
+    Type: String
+    Default: 'arn:aws:iam::299414552714:role/LabRole'
+
+Resources:
+  # SQS queue
+  JobSqsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "job-queue"
+      DelaySeconds: 15
+
+  # State machine
+  JobStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Role: !Ref LabRole
+      DefinitionUri: step_function.asl.json
+      DefinitionSubstitutions:
+        SubmitJobFunctionArn: !GetAtt SubmitJobFunction.Arn
+
+  # Functions
+  SubmitJobFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Ref LabRole
+      CodeUri: submit_job/
+      Environment:
+        Variables:
+          SQS_QUEUE_NAME: !GetAtt JobSqsQueue.QueueUrl
+  
+  JobFinishedFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Ref LabRole
+      CodeUri: job_finished/
+      Events:
+        JobSQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt JobSqsQueue.Arn
+            BatchSize: 10
+
+Outputs:
+  JobStateMachineArn:
+    Description: "Job State Machine Arn"
+    Value: !Ref JobStateMachine
+
+  SubmitJobFunctionArn:
+    Description: Submit Job Function Arn"
+    Value: !Ref SubmitJobFunction
+  
+  JobFinishedFunctionArn:
+    Description: Job Finished Function Arn"
+    Value: !Ref JobFinishedFunction
+  
+  JobSqsQueueArn:
+    Description: Job SQS Queue Arn"
+    Value: !Ref JobSqsQueue
+  
+
