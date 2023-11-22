@@ -1,15 +1,15 @@
-name: SAM Release pipeline
+name: SAM Chat App - Release pipeline
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - 'module-2/opdracht_4_3'
-      - '.github/workflows/assignment-2-4-3-sam-notes-app-release-pipeline.yml'
+      - 'module-2/opdracht_4_2'
+      - '.github/workflows/assignment-2-4-2-sam-chat-app-release-pipeline.yml'
   workflow_dispatch:
 
 env:
-  ROOT_DIRECTORY: './module-2/opdracht_4_3'
+  ROOT_DIRECTORY: './module-2/opdracht_4_2'
 
 jobs:
   build-sam:
@@ -17,7 +17,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: '${{ env.ROOT_DIRECTORY }}/notes-sam-app'
+        working-directory: '${{ env.ROOT_DIRECTORY }}/chat-app-sam'
 
     permissions:
       actions: write
@@ -52,9 +52,9 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: sam-notes-app-v${{ github.run_number }}
-          tag_name: sam-notes-app-v${{ github.run_number }}
+          token: ${{ github.token }}
+          name: sam-chat-app-v${{ github.run_number }}
+          tag_name: sam-chat-app-v${{ github.run_number }}
           draft: false
           prerelease: false
 
@@ -93,4 +93,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Upload to S3
-        run: aws s3 sync dist s3://notes-frontend/
+        run: aws s3 sync dist s3://chat-app-ws-example-frontend/
