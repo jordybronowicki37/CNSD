@@ -1,4 +1,4 @@
-name: SAM Release pipeline
+name: SAM Notes App - Release pipeline
 
 on:
   push:

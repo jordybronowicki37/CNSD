@@ -63,7 +63,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: '${{ env.ROOT_DIRECTORY }}/notes-frontend'
+        working-directory: '${{ env.ROOT_DIRECTORY }}/chat-app-frontend'
 
     permissions:
       actions: write
